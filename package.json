@@ -14,12 +14,14 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.18",
     "@vitejs/plugin-react": "^5.1.2",
     "autoprefixer": "^10.4.23",
     "live-server": "^1.2.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
+    "tailwindcss-animate": "^1.0.7",
     "vite": "^7.3.0"
   },
   "dependencies": {
