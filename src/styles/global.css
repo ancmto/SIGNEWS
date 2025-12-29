@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary)
+}
+
+:root {
+    --primary-color: #6200EE;
+    --primary-hover: #5000C8;
+    --secondary-color: #F3E5F5;
+    --text-primary: #1F2937;
+    --text-secondary: #6B7280;
+    --bg-color: #F3F4F6;
+    --surface-color: #FFF;
+    --sidebar-width: 260px
+}
+
+.ant-btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transition: all 0.3s ease
+}
+.ant-btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover)
+}
+.ant-input {
+    transition: all 0.2s;
+    border: 1px solid #D1D5DB
+}
+.ant-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(98, 0, 238, 0.1);
+    outline: none
+}
+.glass-panel {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)
+}
+.hero-pattern {
+    background-color: #4c1d95;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDHgUA-LIFxHH-uDTbEw2yWCTKzqADACgTS-ZBGPGNuVrW6HmyzRVaAy49ldBRra_CfP2I5-LAu7PBxkXEkaPbW06wYxkzUWHcKsGDcFMX5BmJrsTQF5gX9EU7WZS_Abq2GMVjesqcjeRVz1F6hG_pS6NOEZb0UftlYBB5RRnaK9aOUlEi0PyAGYSZofpkdZwJ4WY3kEA5Hj2-c9SzR26iHYJL3ArMVfep3t_wQUrttcceRc6UInDMtfYSrdNsCkBs3Gl-GNDG1AHc)
+}

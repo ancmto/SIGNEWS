@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - Sistema de Gestão de Informação</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">:root {
+    --primary-color: #6200EE;
+    --primary-hover: #5000C8;
+    --secondary-color: #F3E5F5;
+    --text-primary: #1F2937;
+    --text-secondary: #6B7280;
+    --bg-color: #F3F4F6;
+    --surface-color: #FFF;
+    --sidebar-width: 260px
+    }
+body {
+    font-family: "Inter", sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary)
+    }
+.ant-btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transition: all 0.3s ease
+    }
+.ant-btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover)
+    }
+.ant-input {
+    transition: all 0.2s;
+    border: 1px solid #D1D5DB
+    }
+.ant-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(98, 0, 238, 0.1);
+    outline: none
+    }
+.glass-panel {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)
+    }
+.hero-pattern {
+    background-color: #4c1d95;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDHgUA-LIFxHH-uDTbEw2yWCTKzqADACgTS-ZBGPGNuVrW6HmyzRVaAy49ldBRra_CfP2I5-LAu7PBxkXEkaPbW06wYxkzUWHcKsGDcFMX5BmJrsTQF5gX9EU7WZS_Abq2GMVjesqcjeRVz1F6hG_pS6NOEZb0UftlYBB5RRnaK9aOUlEi0PyAGYSZofpkdZwJ4WY3kEA5Hj2-c9SzR26iHYJL3ArMVfep3t_wQUrttcceRc6UInDMtfYSrdNsCkBs3Gl-GNDG1AHc)
+    }</style>
+</head>
+<body class="h-screen w-full flex overflow-hidden">
+<div class="hidden lg:flex lg:w-1/2 hero-pattern relative flex-col justify-between p-12 text-white overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-tr from-purple-900/90 to-purple-800/80 z-0"></div>
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+<div class="absolute top-1/2 -right-24 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-purple-700 font-bold text-xl shadow-lg">
+                    SGI
+                </div>
+<h2 class="text-xl font-semibold tracking-wide">Eco TV</h2>
+</div>
+</div>
+<div class="relative z-10 max-w-lg">
+<h1 class="text-5xl font-bold mb-6 leading-tight">Sistema de Gestão de Informação</h1>
+<p class="text-lg text-purple-100 mb-8 font-light">
+                O NCRS completo para planejamento, produção, aprovação e exibição de conteúdos jornalísticos. Centralize sua redação com eficiência e segurança.
+            </p>
+<div class="flex gap-4 mt-8">
+<div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
+<span class="material-symbols-outlined text-purple-200">check_circle</span>
+<span class="text-sm font-medium">Fluxo Unificado</span>
+</div>
+<div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
+<span class="material-symbols-outlined text-purple-200">security</span>
+<span class="text-sm font-medium">Segurança Total</span>
+</div>
+<div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
+<span class="material-symbols-outlined text-purple-200">speed</span>
+<span class="text-sm font-medium">Alta Performance</span>
+</div>
+</div>
+</div>
+<div class="relative z-10 text-sm text-purple-200 opacity-80">
+            © 2024 Eco TV. Todos os direitos reservados.
+        </div>
+</div>
+<div class="w-full lg:w-1/2 bg-gray-50 flex flex-col items-center justify-center p-6 md:p-12 relative">
+<div class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-10">
+<div class="lg:hidden mb-8 text-center">
+<div class="w-12 h-12 bg-purple-700 rounded-lg flex items-center justify-center text-white font-bold text-2xl shadow-lg mx-auto mb-4">
+                    SGI
+                </div>
+<h1 class="text-2xl font-bold text-gray-900">Eco TV SGI</h1>
+</div>
+<div class="text-center mb-10">
+<h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Bem-vindo de volta</h2>
+<p class="text-gray-500 text-sm">Acesse sua conta para gerenciar conteúdos</p>
+</div>
+<form action="#" class="space-y-6">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="email">Email ou Usuário</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+<input class="ant-input block w-full pl-10 pr-3 py-3 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:ring-purple-500 focus:border-purple-500" id="email" name="email" placeholder="seu.nome@ecotv.com.br" type="text"/>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-1">
+<label class="block text-sm font-medium text-gray-700" for="password">Senha</label>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<input class="ant-input block w-full pl-10 pr-10 py-3 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:ring-purple-500 focus:border-purple-500" id="password" name="password" placeholder="••••••••" type="password"/>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-400 hover:text-gray-600">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<input class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded cursor-pointer" id="remember-me" name="remember-me" type="checkbox"/>
+<label class="ml-2 block text-sm text-gray-600 cursor-pointer" for="remember-me">Lembrar-me</label>
+</div>
+<div class="text-sm">
+<a class="font-medium text-purple-600 hover:text-purple-500 transition-colors" href="#">Esqueci minha senha</a>
+</div>
+</div>
+<div>
+<button class="ant-btn-primary w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" type="button">
+                        Entrar
+                    </button>
+</div>
+</form>
+<div class="mt-8">
+<div class="relative">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-gray-200"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="px-2 bg-white text-gray-500">Novo na redação?</span>
+</div>
+</div>
+<div class="mt-6 text-center">
+<a class="font-medium text-purple-600 hover:text-purple-500 transition-colors hover:underline" href="#">
+                        Cadastrar-se no sistema
+                    </a>
+</div>
+</div>
+<div class="mt-10 flex items-center justify-center gap-2 text-xs text-gray-400">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span>Conexão Segura SSL 256-bit</span>
+</div>
+</div>
+<div class="absolute bottom-4 left-0 w-full text-center text-xs text-gray-400 lg:hidden">
+            © 2024 Sistema de Gestão de Informação
+        </div>
+</div>
+
+</body></html>

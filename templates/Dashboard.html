@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Início (Dashboard) SGI - UI Ajustada</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#7f13ec", // Eco TV Purple
+                        "primary-hover": "#6b11c9",
+                        "menu-dark": "#001529", // Ant Design Dark Sidebar
+                        "menu-dark-submenu": "#000c17",
+                        "menu-dark-hover": "#1890ff",
+                        "success": "#52c41a",
+                        "warning": "#faad14",
+                        "error": "#f5222d",
+                        "info": "#1890ff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    boxShadow: {
+                        'card': '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'floating': '0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)'
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .ant-card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+            transition: all 0.3s;
+        }
+        .ant-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-color: #e6e6e6;
+        }
+        .nav-item.active {
+            background-color: #7f13ec;
+            color: white;
+        }
+        .nav-item:not(.active):hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        .submenu-item:hover {
+            color: white;
+        }.sidebar-section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.45);
+            padding: 16px 24px 8px;
+        }
+    </style>
+</head>
+<body class="bg-[#f0f2f5] text-slate-900 antialiased overflow-hidden">
+<div class="flex h-screen w-full">
+<aside class="w-[250px] flex-shrink-0 flex flex-col bg-menu-dark h-full z-30 hidden md:flex transition-all duration-300 shadow-xl relative">
+<div class="h-16 flex items-center gap-3 px-5 bg-[#001529] shadow-sm flex-shrink-0 z-10 border-b border-white/5">
+<div class="bg-primary size-8 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-[0_0_15px_rgba(127,19,236,0.5)]">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-white text-[15px] font-bold leading-none tracking-tight font-display">SGI NEWSROOM</h1>
+<span class="text-white/40 text-[9px] uppercase font-bold tracking-widest mt-1">Sistema de Gestão</span>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto py-2 flex flex-col gap-0.5 text-[14px]">
+<a class="nav-item active flex items-center gap-3 px-6 py-3 transition-colors relative mb-1 mx-2 rounded" href="#">
+<span class="material-symbols-outlined filled text-[20px]">dashboard</span>
+<span class="font-medium">Início</span>
+</a>
+<div class="sidebar-section-label">Planejamento</div>
+<a class="nav-item flex items-center gap-3 px-6 py-2.5 text-white/70 transition-colors mx-2 rounded" href="#">
+<span class="material-symbols-outlined text-[20px]">article</span>
+<span class="font-medium">Pautas</span>
+</a>
+<a class="nav-item flex items-center gap-3 px-6 py-2.5 text-white/70 transition-colors mx-2 rounded" href="#">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+<span class="font-medium">Agenda</span>
+</a>
+<div class="sidebar-section-label">Produção</div>
+<a class="nav-item flex items-center gap-3 px-6 py-2.5 text-white/70 transition-colors mx-2 rounded" href="#">
+<span class="material-symbols-outlined text-[20px]">videocam</span>
+<span class="font-medium">Reportagens</span>
+</a>
+<a class="nav-item flex items-center gap-3 px-6 py-2.5 text-white/70 transition-colors mx-2 rounded" href="#">
+<span class="material-symbols-outlined text-[20px]">folder_open</span>
+<span class="font-medium">Mídias &amp; Ingest</span>
+</a>
+<div class="sidebar-section-label">Exibição</div>
+<a class="nav-item flex items-center gap-3 px-6 py-2.5 text-white/70 transition-colors mx-2 rounded" href="#">
+<span class="material-symbols-outlined text-[20px]">view_timeline</span>
+<span class="font-medium">Espelhos</span>
+</a>
+<a class="nav-item flex items-center gap-3 px-6 py-2.5 text-white/70 transition-colors mx-2 rounded" href="#">
+<span class="material-symbols-outlined text-[20px]">live_tv</span>
+<span class="font-medium">Teleprompter</span>
+</a>
+<div class="sidebar-section-label">Administração</div>
+<a class="nav-item flex items-center gap-3 px-6 py-2.5 text-white/70 transition-colors mx-2 rounded" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-medium">Administração</span>
+</a>
+</nav>
+<div class="p-0 border-t border-white/5 bg-[#000c17]">
+<div class="flex items-center gap-3 p-4 hover:bg-white/5 cursor-pointer transition-colors">
+<div class="size-9 rounded-full bg-cover bg-center ring-2 ring-primary/30 relative" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCFv07KAjaRPThNMB987xlbPlwbK00FyNymS_8qFyp0VKfE_l_TIL5wLa3GUZY_pIP2k6HZfLtFd0kd1YPG2WKfv7NvweH0ZC9DosuKbcMptdq94qJDcrKdY_45WtqQI2XQTj4dfBcv5LLyQul5eeNtF1b_WrzDTxxrp5xx81deK-DwuHmBYcA4ftDsgTYW6DuM8Z4GDmjDxHXd59dyJXTwpmtyUCs4pK9Q1qwxuuNHZjK3d5_LxIm8694swowI_1Mw7RyHmuvv2OE");'>
+<span class="absolute bottom-0 right-0 size-2.5 bg-success border-2 border-[#001529] rounded-full"></span>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="text-sm font-semibold text-white truncate">Ana Silva</span>
+<span class="text-[11px] text-white/50 truncate">Editora Chefe</span>
+</div>
+<span class="material-symbols-outlined text-white/30 ml-auto text-[18px]">expand_more</span>
+</div>
+</div>
+</aside>
+<div class="flex flex-col flex-1 h-full overflow-hidden bg-[#f0f2f5] relative">
+<header class="flex-shrink-0 h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between z-20 shadow-sm">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="hidden md:flex max-w-lg w-full relative group">
+<input class="w-[320px] bg-gray-50 border border-gray-200 text-slate-900 text-sm rounded-md px-4 py-2 pl-10 focus:ring-1 focus:ring-primary focus:border-primary focus:w-[400px] outline-none transition-all placeholder:text-gray-400 group-hover:bg-white group-hover:border-gray-300" placeholder="Buscar pauta, vídeo ou espelho..." type="text"/>
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined text-[18px]">search</span>
+<div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="text-[10px] bg-white border border-gray-200 rounded px-1.5 py-0.5 text-gray-400">Ctrl K</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 flex-1 justify-end">
+<button class="size-9 flex items-center justify-center rounded-full hover:bg-gray-50 text-slate-500 relative transition-colors group" title="Notificações">
+<span class="material-symbols-outlined text-[22px] group-hover:text-primary transition-colors">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-error rounded-full border border-white"></span>
+</button>
+<button class="size-9 flex items-center justify-center rounded-full hover:bg-gray-50 text-slate-500 transition-colors group" title="Ajuda">
+<span class="material-symbols-outlined text-[22px] group-hover:text-primary transition-colors">help</span>
+</button>
+<div class="h-8 w-px bg-gray-200 mx-1"></div>
+<div class="flex items-center gap-2 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-full border border-purple-100 cursor-pointer transition-colors">
+<span class="size-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-bold text-primary">Redação SP</span>
+<span class="material-symbols-outlined text-primary text-[16px]">expand_more</span>
+</div>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth">
+<div class="max-w-[1600px] mx-auto space-y-6">
+<div class="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center bg-white p-6 rounded-lg border border-gray-100 shadow-card">
+<div>
+<h2 class="text-2xl font-bold text-slate-800 tracking-tight">Olá, Ana! 👋</h2>
+<p class="text-slate-500 text-sm mt-1">Aqui está o panorama geral da produção hoje.</p>
+</div>
+<div class="flex flex-wrap gap-3">
+<button class="inline-flex items-center gap-2 bg-primary hover:bg-primary-hover text-white text-sm font-medium px-4 py-2 rounded-md shadow-sm shadow-purple-200 transition-all hover:-translate-y-0.5">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Nova Pauta
+                        </button>
+<button class="inline-flex items-center gap-2 bg-white hover:border-primary text-slate-600 hover:text-primary border border-gray-200 text-sm font-medium px-4 py-2 rounded-md transition-all hover:-translate-y-0.5 hover:shadow-sm">
+<span class="material-symbols-outlined text-[18px]">videocam</span>
+                            Nova Reportagem
+                        </button>
+<button class="inline-flex items-center gap-2 bg-white hover:border-primary text-slate-600 hover:text-primary border border-gray-200 text-sm font-medium px-4 py-2 rounded-md transition-all hover:-translate-y-0.5 hover:shadow-sm">
+<span class="material-symbols-outlined text-[18px]">view_timeline</span>
+                            Novo Espelho
+                        </button>
+</div>
+</div>
+<div class="rounded-md bg-[#fffbe6] border border-[#ffe58f] p-4 flex items-start gap-3 shadow-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-[#faad14]"></div>
+<span class="material-symbols-outlined text-[#faad14] mt-0.5">warning</span>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-slate-800">Alerta Editorial: Chuvas SP</h4>
+<p class="text-sm text-slate-600 mt-1 leading-relaxed">Cobertura prioritária das chuvas na região metropolitana. Equipes devem focar em alagamentos na Zona Leste. Atualizações de trânsito e defesa civil a cada 30 min no sistema.</p>
+</div>
+<div class="flex gap-4">
+<button class="text-sm text-[#faad14] font-medium hover:text-orange-600 whitespace-nowrap transition-colors">Ignorar</button>
+<button class="text-sm bg-[#faad14] text-white px-3 py-1 rounded font-medium hover:bg-orange-500 whitespace-nowrap transition-colors shadow-sm">Ver detalhes</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="ant-card p-5 group cursor-pointer border-l-4 border-l-transparent hover:border-l-primary">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Pautas do Dia</p>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="text-3xl font-bold text-slate-800">24</h3>
+<span class="text-xs font-medium text-success flex items-center">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                        +4
+                                    </span>
+</div>
+</div>
+<div class="size-10 rounded-full bg-purple-50 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">article</span>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs mb-1.5">
+<span class="text-slate-600 font-medium">Pendentes / Em Análise</span>
+<span class="font-bold text-slate-800">16</span>
+</div>
+<div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-orange-400 w-[66%] rounded-full relative overflow-hidden">
+<div class="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]"></div>
+</div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1.5">
+<span class="text-slate-600 font-medium">Aprovadas</span>
+<span class="font-bold text-slate-800">8</span>
+</div>
+<div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-success w-[33%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="ant-card p-5 group cursor-pointer border-l-4 border-l-transparent hover:border-l-info">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Reportagens</p>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="text-3xl font-bold text-slate-800">18</h3>
+</div>
+</div>
+<div class="size-10 rounded-full bg-blue-50 text-info flex items-center justify-center group-hover:bg-info group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">video_library</span>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs mb-1.5">
+<span class="text-slate-600 font-medium">Em Produção / Edição</span>
+<span class="font-bold text-slate-800">12</span>
+</div>
+<div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-info w-[66%] rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1.5">
+<span class="text-slate-600 font-medium">Prontas para Exibição</span>
+<span class="font-bold text-slate-800">6</span>
+</div>
+<div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-success w-[33%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="ant-card p-5 group cursor-pointer border-l-4 border-l-transparent hover:border-l-error">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Espelhos do Dia</p>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="text-3xl font-bold text-slate-800">04</h3>
+</div>
+</div>
+<div class="size-10 rounded-full bg-red-50 text-error flex items-center justify-center group-hover:bg-error group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">live_tv</span>
+</div>
+</div>
+<div class="mt-2 space-y-3">
+<div class="flex items-center justify-between p-2.5 bg-red-50/50 rounded border border-red-100">
+<div class="flex items-center gap-2.5">
+<span class="size-2.5 rounded-full bg-error animate-pulse shadow-[0_0_8px_rgba(245,34,45,0.6)]"></span>
+<span class="text-xs font-bold text-slate-800">SGI Meio Dia</span>
+</div>
+<span class="text-[10px] font-bold text-error border border-error/20 px-2 py-0.5 rounded bg-white">NO AR</span>
+</div>
+<div class="flex items-center justify-between p-2.5 bg-white rounded border border-gray-100">
+<div class="flex items-center gap-2.5">
+<span class="size-2.5 rounded-full bg-warning"></span>
+<span class="text-xs font-medium text-slate-600">Jornal da Tarde</span>
+</div>
+<span class="text-[10px] font-mono text-slate-500 bg-gray-50 px-1.5 py-0.5 rounded">18:30</span>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">view_kanban</span>
+                                Status dos Espelhos
+                            </h3>
+<button class="text-xs text-primary font-medium hover:underline flex items-center gap-1">
+                                Ver grade completa
+                                <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="ant-card p-4 flex flex-col justify-between hover:shadow-floating transition-all duration-300 cursor-pointer relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-gray-300 group-hover:w-1.5 transition-all"></div>
+<div class="flex justify-between items-start mb-3 pl-2">
+<div>
+<h4 class="font-bold text-slate-800 text-sm">Jornal da Manhã</h4>
+<div class="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                                            07:00 - 08:30
+                                        </div>
+</div>
+<span class="text-[10px] px-2 py-1 bg-gray-100 text-slate-500 rounded font-bold uppercase tracking-wide">Encerrado</span>
+</div>
+<div class="mt-2 flex items-center justify-between pl-2 border-t border-gray-50 pt-3">
+<div class="flex -space-x-2">
+<div class="size-6 rounded-full bg-gray-200 border-2 border-white" title="User A"></div>
+<div class="size-6 rounded-full bg-gray-300 border-2 border-white flex items-center justify-center text-[9px] font-bold text-slate-600">+3</div>
+</div>
+<span class="text-xs text-slate-400">Editor: Carlos M.</span>
+</div>
+</div>
+<div class="ant-card p-4 flex flex-col justify-between hover:shadow-floating transition-all duration-300 cursor-pointer relative overflow-hidden group bg-gradient-to-r from-white to-red-50/10">
+<div class="absolute top-0 left-0 w-1 h-full bg-error group-hover:w-1.5 transition-all"></div>
+<div class="flex justify-between items-start mb-3 pl-2">
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-bold text-slate-800 text-sm">SGI Meio Dia</h4>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-error"></span>
+</span>
+</div>
+<div class="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                                            12:00 - 13:15
+                                        </div>
+</div>
+<span class="text-[10px] px-2 py-1 bg-error/10 text-error rounded font-bold uppercase tracking-wide border border-error/20">NO AR</span>
+</div>
+<div class="mt-2 pl-2">
+<div class="flex justify-between text-[10px] text-slate-500 mb-1">
+<span>Progresso</span>
+<span class="font-bold text-error">45%</span>
+</div>
+<div class="w-full bg-gray-100 rounded-full h-1.5">
+<div class="bg-error h-1.5 rounded-full transition-all duration-1000 ease-out relative" style="width: 45%">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 size-2 bg-white border-2 border-error rounded-full shadow"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="ant-card p-4 flex flex-col justify-between hover:shadow-floating transition-all duration-300 cursor-pointer relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-warning group-hover:w-1.5 transition-all"></div>
+<div class="flex justify-between items-start mb-3 pl-2">
+<div>
+<h4 class="font-bold text-slate-800 text-sm">Jornal da Tarde</h4>
+<div class="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                                            18:30 - 19:15
+                                        </div>
+</div>
+<span class="text-[10px] px-2 py-1 bg-warning/10 text-amber-700 rounded font-bold uppercase tracking-wide border border-warning/20">Preparação</span>
+</div>
+<div class="mt-2 pl-2 grid grid-cols-3 gap-2 text-center pt-2 border-t border-gray-50">
+<div class="bg-gray-50 rounded p-1.5">
+<span class="block text-xs font-bold text-slate-700">12</span>
+<span class="block text-[9px] text-slate-400 uppercase font-semibold">Matérias</span>
+</div>
+<div class="bg-gray-50 rounded p-1.5">
+<span class="block text-xs font-bold text-slate-700">45'</span>
+<span class="block text-[9px] text-slate-400 uppercase font-semibold">Tempo</span>
+</div>
+<div class="bg-red-50 rounded p-1.5 border border-red-100">
+<span class="block text-xs font-bold text-error">-2'</span>
+<span class="block text-[9px] text-error uppercase font-semibold">Estouro</span>
+</div>
+</div>
+</div>
+<div class="ant-card p-4 flex flex-col justify-between hover:shadow-floating transition-all duration-300 cursor-pointer relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-info group-hover:w-1.5 transition-all"></div>
+<div class="flex justify-between items-start mb-3 pl-2">
+<div>
+<h4 class="font-bold text-slate-800 text-sm">Edição da Noite</h4>
+<div class="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                                            22:00 - 22:45
+                                        </div>
+</div>
+<span class="text-[10px] px-2 py-1 bg-blue-50 text-info rounded font-bold uppercase tracking-wide border border-blue-100">Aberto</span>
+</div>
+<div class="mt-2 flex items-center justify-between pl-2 border-t border-gray-50 pt-3">
+<span class="text-xs text-slate-500">Editor: <strong class="text-slate-700">Patricia L.</strong></span>
+<button class="text-xs text-primary hover:underline font-medium">Abrir Espelho</button>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-1 space-y-6">
+<div class="ant-card">
+<div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 rounded-t-lg">
+<h3 class="text-sm font-bold text-slate-800">Atividade Recente</h3>
+<button class="text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+</div>
+<div class="p-0">
+<div class="flex gap-3 p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 relative">
+<div class="absolute left-4 top-4 bottom-0 w-px bg-gray-100 ml-1 z-0 last:hidden"></div>
+<div class="mt-1 flex-shrink-0 z-10 relative bg-white p-0.5">
+<div class="size-2.5 bg-success rounded-full ring-4 ring-green-50"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-slate-800">Pauta "Reforma praça" aprovada</span>
+<p class="text-[11px] text-slate-500 mt-0.5 leading-snug">O editor chefe aprovou a pauta para produção.</p>
+<span class="text-[10px] text-slate-400 mt-1">Por Ricardo • Há 10 min</span>
+</div>
+</div>
+<div class="flex gap-3 p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 relative">
+<div class="absolute left-4 top-4 bottom-0 w-px bg-gray-100 ml-1 z-0"></div>
+<div class="mt-1 flex-shrink-0 z-10 relative bg-white p-0.5">
+<div class="size-2.5 bg-info rounded-full ring-4 ring-blue-50"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-slate-800">Ingest de vídeo concluído</span>
+<span class="text-[10px] text-slate-400 mt-1">Servidor 2 • Há 45 min</span>
+</div>
+</div>
+<div class="flex gap-3 p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 relative">
+<div class="mt-1 flex-shrink-0 z-10 relative bg-white p-0.5">
+<div class="size-2.5 bg-warning rounded-full ring-4 ring-yellow-50"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-slate-800">Espelho JT alterado</span>
+<p class="text-[11px] text-slate-500 mt-0.5 leading-snug">Bloco 2 movido para final.</p>
+<span class="text-[10px] text-slate-400 mt-1">Roberto F. • Há 1 hora</span>
+</div>
+</div>
+</div>
+</div>
+<div class="ant-card p-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold text-slate-800">Equipes Externas</h3>
+<span class="bg-gray-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-full">3 Ativas</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-cover shadow-sm" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCZ74r_r84rMFNoWqN62NWiSsvxCtp1oyUfPmX99g49k1DvjwpUa3EPwuNY7L0n2CmIEXD2hitrwnv6indeHkxbtmn6vVv3CLKydqoZq7j6bjcmxnQzbeG-ka9y1p84F8aEcSWMjdIBON_CU15gi7gCkxuwQVhXSWbyy-XYT1ZCYbfMdhwJy0WQMRHhKDfoY4zR5fFmyDITSphnEhdAr_HLZWmHbQrIHvoV-2bcaBlfulVj1Ivd5D6PnDI3XFlSuipHdO5DhAncnWY");'></div>
+<div>
+<p class="text-xs font-bold text-slate-700">Equipe 01 (Jornalismo)</p>
+<div class="flex items-center gap-1 text-[10px] text-slate-500">
+<span class="material-symbols-outlined text-[10px]">location_on</span>
+                                                Centro
+                                            </div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="size-2 rounded-full bg-success mb-1" title="Disponível"></span>
+<span class="text-[9px] text-success font-medium">Livre</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-cover shadow-sm" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCI8ElU3hBwp82Li1KPK7ITik5d0t9zBS-qEWxr-_BszRoilvGg25leX5vits7wlBvJUo4GevODnZnJmj6LHlYfb0-RUx6vgLtfS_sY82h8B-iMbanM3R20MEdaWiOhLuDOd7XpijCZM7Wshdy7MpLZ65amkHL9qsmFy8bTEpLWqsgtyrm3T63auTbkiH7IbtAXNhTyGec8ZcN4cz3AsoNgjJDqw1wxhCLM8Xa1EOGAQOq2NoyZ0Ax9tGk-POTN3vZkWIjeU-69A_M");'></div>
+<div>
+<p class="text-xs font-bold text-slate-700">Equipe 03 (Ao Vivo)</p>
+<div class="flex items-center gap-1 text-[10px] text-slate-500">
+<span class="material-symbols-outlined text-[10px]">location_on</span>
+                                                Zona Norte
+                                            </div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="size-2 rounded-full bg-error mb-1" title="Ocupada"></span>
+<span class="text-[9px] text-error font-medium">No ar</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-cover shadow-sm" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDyfOF2gDNOWASozAXEDJheWJA2XwNsWXrJc6ttnll0mAsmZEvIPfQmuy5VBGJtqrBSvEGVaYSv9IaJqU6pnCXNHLgM6_5g732NYbMVhka1d3_mVzD_N4cRoTyySV-i2SvPNSUiZVzZS3m22vFWxkTzoL1ZMf52yAegA6-ufVvBC5lcxNh5iVRVhTfQPD6n_x0T6ZVJ_Wre9DgAccUA_JHE1o6U_2RDFcZQaEFtHY6tjRB67DoBN94mkr2Vxw-i94XtJ8_RSFAve8g");'></div>
+<div>
+<p class="text-xs font-bold text-slate-700">Mochilink 02</p>
+<div class="flex items-center gap-1 text-[10px] text-slate-500">
+<span class="material-symbols-outlined text-[10px]">directions_car</span>
+                                                Deslocamento
+                                            </div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="size-2 rounded-full bg-warning mb-1" title="Em trânsito"></span>
+<span class="text-[9px] text-warning-700 font-medium">Trânsito</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 py-2 text-xs text-slate-600 font-medium bg-white hover:bg-gray-50 rounded border border-gray-200 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[14px]">map</span>
+                                Ver mapa de equipes
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>
