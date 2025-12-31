@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pautas - Cadastro/Edição (Atualizado v3)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f3e8ff',
+                            100: '#e9d5ff',
+                            200: '#d8b4fe',
+                            300: '#c084fc',
+                            400: '#a855f7',
+                            500: '#9333ea', // Main Purple
+                            600: '#7e22ce',
+                            700: '#6b21a8',
+                            800: '#581c87',
+                            900: '#3b0764',
+                            DEFAULT: '#722ED1', // Ant Design Purple
+                        },
+                        background: {
+                            light: '#f0f2f5', // Ant Design bg
+                            dark: '#001529', // Ant Design dark sidebar
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+        .ant-input:focus, .ant-input:focus-within {
+            border-color: #722ED1;
+            box-shadow: 0 0 0 2px rgba(114, 46, 209, 0.2);
+        }
+        .ant-input:invalid:not(:placeholder-shown) {
+            border-color: #ff4d4f;
+            background-color: #fff2f0;
+        }
+        .ant-input:invalid:not(:placeholder-shown):focus {
+            box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-900 bg-background-light antialiased">
+<div class="flex h-screen w-full overflow-hidden">
+<aside class="flex w-64 flex-col bg-background-dark text-white transition-all duration-300 ease-in-out shrink-0 z-20 shadow-xl">
+<div class="flex h-16 items-center gap-3 px-6 bg-[#002140]">
+<div class="flex items-center justify-center rounded bg-primary size-8 text-white shadow-lg shadow-primary/40">
+<span class="material-symbols-outlined text-xl">dataset</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-white text-lg font-bold leading-none tracking-tight">SGI</h1>
+<p class="text-gray-400 text-[10px] font-normal mt-0.5 opacity-70">Newsroom System</p>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto py-4 px-2 flex flex-col gap-1 custom-scrollbar">
+<a class="flex items-center gap-3 px-4 py-3 rounded text-gray-400 hover:text-white hover:bg-white/10 transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<div class="flex flex-col gap-1">
+<a class="flex items-center justify-between px-4 py-3 rounded bg-primary text-white shadow-lg shadow-primary/20 transition-all" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] filled">article</span>
+<span class="text-sm font-medium">Pautas</span>
+</div>
+</a>
+</div>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-gray-400 hover:text-white hover:bg-white/10 transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">format_list_bulleted</span>
+<span class="text-sm font-medium">Escaletas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-gray-400 hover:text-white hover:bg-white/10 transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">download</span>
+<span class="text-sm font-medium">Ingest</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-gray-400 hover:text-white hover:bg-white/10 transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">folder_open</span>
+<span class="text-sm font-medium">Arquivo</span>
+</a>
+<div class="my-2 border-t border-white/10 mx-4"></div>
+<a class="flex items-center justify-between px-4 py-3 rounded text-gray-400 hover:text-white hover:bg-white/10 transition-all group" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">settings</span>
+<span class="text-sm font-medium">Configurações</span>
+</div>
+<span class="material-symbols-outlined text-sm opacity-50">expand_more</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/10 bg-[#001529]">
+<div class="flex items-center gap-3 p-2 rounded hover:bg-white/5 transition-colors cursor-pointer">
+<div class="relative size-9 rounded-full overflow-hidden ring-2 ring-white/10">
+<img alt="Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7IhTt2MrsNlNhjv8eNVCq9oH-eBBIzOQYbMXBcCMvGSQd5g4lxP1NM5K8iKtIrnD05EwA4CpQIuS8lzzkb8u-rW2u2jfviAMqPpYQwJQH8jfWBKoaCykDkzhs3Od5rFlGtM1BQAD-I-XiPEkeROXM0PKfb-7PEHqvZLYHTME_M51oLw5SJsl1eA-DLEe2-6SV689UpBd1AamIAi2XrXcpY625QKYTxMp2aWDZYuLHu6PKnwqP8Gx54a5btOiFJB1jQWJraHbX3Uc"/>
+<div class="absolute bottom-0 right-0 size-2.5 bg-green-500 border-2 border-[#001529] rounded-full"></div>
+</div>
+<div class="flex flex-col overflow-hidden">
+<p class="text-white text-sm font-medium truncate">Carlos Mendes</p>
+<p class="text-gray-400 text-xs truncate">Editor Chefe</p>
+</div>
+</div>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+<header class="h-16 flex items-center justify-between px-6 bg-white border-b border-gray-200 shadow-sm shrink-0 z-10">
+<nav class="flex items-center text-sm font-medium text-gray-500">
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[18px]">home</span>
+</a>
+<span class="mx-2 text-gray-300">/</span>
+<a class="hover:text-primary transition-colors" href="#">Pautas</a>
+<span class="mx-2 text-gray-300">/</span>
+<span class="text-primary font-semibold">Cadastro de Pauta</span>
+</nav>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-gray-400 hover:text-primary hover:bg-primary-50 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full ring-2 ring-white"></span>
+</button>
+<div class="h-8 w-px bg-gray-200"></div>
+<button class="p-2 text-gray-400 hover:text-primary hover:bg-primary-50 rounded-full transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto p-6 md:p-8 bg-background-light scroll-smooth">
+<form action="#" class="max-w-[1400px] mx-auto flex flex-col gap-6" method="POST">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 sticky top-0 z-10 bg-background-light/95 backdrop-blur py-2 -mt-2 border-b border-transparent">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h1 class="text-2xl font-bold text-slate-800 tracking-tight">Incêndio no Centro Histórico</h1>
+<span class="px-2 py-0.5 rounded bg-gray-200 text-gray-600 text-xs font-mono font-bold">#4092</span>
+</div>
+<p class="text-slate-500 text-sm">Preencha os dados abaixo. Campos com <span class="text-red-500">*</span> são obrigatórios.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded border border-gray-300 bg-white text-slate-600 hover:border-gray-400 hover:text-slate-800 text-sm font-medium transition-all shadow-sm" type="button">
+                            Cancelar
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded border border-primary text-primary bg-white hover:bg-primary-50 text-sm font-medium transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">send</span>
+                            Submeter
+                        </button>
+<button class="flex items-center gap-2 px-6 py-2 rounded bg-primary text-white hover:bg-primary-600 text-sm font-medium transition-all shadow-md shadow-primary/20" type="submit">
+<span class="material-symbols-outlined text-[18px]">save</span>
+                            Salvar Alterações
+                        </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 flex flex-col gap-6">
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+<h2 class="text-base font-bold text-slate-800 mb-6 flex items-center gap-2 pb-2 border-b border-gray-100">
+<span class="material-symbols-outlined text-primary text-[20px]">edit_document</span>
+                                Dados da Pauta
+                            </h2>
+<div class="space-y-6">
+<div>
+<label class="block text-sm font-medium text-slate-700 mb-1.5 after:content-['*'] after:ml-0.5 after:text-red-500" for="title">Título</label>
+<input class="ant-input w-full px-3 py-2 bg-white border border-gray-300 rounded text-slate-900 placeholder-gray-400 focus:outline-none transition-all text-sm font-medium peer" id="title" name="title" placeholder="Digite um título claro e conciso" required="" type="text" value="Incêndio no Centro Histórico"/>
+<p class="mt-1 hidden peer-invalid:flex text-xs text-red-500 items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                                        Por favor, insira o título da pauta.
+                                    </p>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 mb-1.5 after:content-['*'] after:ml-0.5 after:text-red-500" for="description">Descrição Detalhada</label>
+<div class="relative group">
+<div class="flex items-center gap-1 p-1 bg-gray-50 border border-gray-300 border-b-0 rounded-t">
+<button class="p-1.5 text-gray-500 hover:text-primary hover:bg-primary-50 rounded transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">format_bold</span></button>
+<button class="p-1.5 text-gray-500 hover:text-primary hover:bg-primary-50 rounded transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">format_italic</span></button>
+<button class="p-1.5 text-gray-500 hover:text-primary hover:bg-primary-50 rounded transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">format_underlined</span></button>
+<div class="h-4 w-px bg-gray-300 mx-1"></div>
+<button class="p-1.5 text-gray-500 hover:text-primary hover:bg-primary-50 rounded transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">format_list_bulleted</span></button>
+</div>
+<textarea class="ant-input w-full px-3 py-2 bg-white border border-gray-300 rounded-b text-slate-700 focus:outline-none transition-all min-h-[200px] resize-y text-sm peer" id="description" name="description" placeholder="Descreva os detalhes da pauta, fontes, locais e orientações..." required="">Incêndio de grandes proporções atinge prédio comercial no centro histórico. Bombeiros no local. Trânsito interditado na Rua das Flores.
+Possíveis fontes:
+- Tenente Marcos (Bombeiros)
+- Dona Maria (Moradora vizinha)
+- Lojistas afetados
+Necessário verificar se há vítimas e o impacto no patrimônio histórico.</textarea>
+<p class="mt-1 hidden peer-invalid:flex text-xs text-red-500 items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                                            A descrição é obrigatória.
+                                        </p>
+</div>
+<p class="mt-1 text-xs text-gray-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">info</span>
+                                        Seja detalhista. Inclua contatos e endereços.
+                                    </p>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+<h2 class="text-base font-bold text-slate-800 mb-6 flex items-center gap-2 pb-2 border-b border-gray-100">
+<span class="material-symbols-outlined text-primary text-[20px]">groups</span>
+                                Equipe Designada
+                            </h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div>
+<label class="block text-xs font-semibold text-slate-600 mb-1.5 after:content-['*'] after:ml-0.5 after:text-red-500">Editor Responsável</label>
+<div class="flex items-center gap-2 p-2 rounded border border-gray-300 bg-white hover:border-primary focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20 transition-all has-[:invalid]:border-red-500 has-[:invalid]:bg-red-50 group">
+<img alt="Editor" class="size-8 rounded-full object-cover ring-2 ring-gray-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7IhTt2MrsNlNhjv8eNVCq9oH-eBBIzOQYbMXBcCMvGSQd5g4lxP1NM5K8iKtIrnD05EwA4CpQIuS8lzzkb8u-rW2u2jfviAMqPpYQwJQH8jfWBKoaCykDkzhs3Od5rFlGtM1BQAD-I-XiPEkeROXM0PKfb-7PEHqvZLYHTME_M51oLw5SJsl1eA-DLEe2-6SV689UpBd1AamIAi2XrXcpY625QKYTxMp2aWDZYuLHu6PKnwqP8Gx54a5btOiFJB1jQWJraHbX3Uc"/>
+<div class="flex-1 min-w-0">
+<select class="peer w-full bg-transparent border-none p-0 text-sm font-medium text-slate-900 focus:ring-0 cursor-pointer outline-none" required="">
+<option value="">Selecione...</option>
+<option selected="" value="1">Carlos Mendes</option>
+<option value="2">Marta Silva</option>
+</select>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-600 mb-1.5 after:content-['*'] after:ml-0.5 after:text-red-500">Jornalista</label>
+<div class="flex items-center gap-2 p-2 rounded border border-gray-300 bg-white hover:border-primary focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20 transition-all has-[:invalid]:border-red-500 has-[:invalid]:bg-red-50 group">
+<img alt="Reporter" class="size-8 rounded-full object-cover ring-2 ring-gray-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDPgDK1uPwRq2dKks0Ob9eOwI3QBgL2p3VZDVxp-IZiZDK0S10Og5hfXP9B8OZKiQqCQlmcxP4IS-bQ3IGYkUNLvLCOf8Xbn812HcNL3mjjzGGjID_T08ek3jBxDIBl8v2YFDwo_tEq3Va8v05rf93nuADg6336lBf2gBkfIbZlC1sxleSdV1w-bxxK2Xml6C0oJ9jqHWqiwNQ8jB4GhaYBqpGue_99fKPbmzpVtDDHVqw1HhLHbjrwLcuD94QWoFbKX96B3ZlVto"/>
+<div class="flex-1 min-w-0">
+<select class="peer w-full bg-transparent border-none p-0 text-sm font-medium text-slate-900 focus:ring-0 cursor-pointer outline-none" required="">
+<option value="">Selecione...</option>
+<option value="1">Roberto Justus</option>
+<option selected="" value="2">Ana Souza</option>
+<option value="0">Não atribuído</option>
+</select>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-600 mb-1.5 after:content-['*'] after:ml-0.5 after:text-red-500">Operador de Câmera</label>
+<div class="flex items-center gap-2 p-2 rounded border border-gray-300 bg-white hover:border-primary focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20 transition-all has-[:invalid]:border-red-500 has-[:invalid]:bg-red-50 group">
+<div class="size-8 rounded-full bg-primary/10 flex items-center justify-center ring-2 ring-gray-100 text-primary">
+<span class="material-symbols-outlined text-lg">videocam</span>
+</div>
+<div class="flex-1 min-w-0">
+<select class="peer w-full bg-transparent border-none p-0 text-sm font-medium text-slate-900 focus:ring-0 cursor-pointer outline-none" required="">
+<option value="">Selecione...</option>
+<option value="1">João Paulo</option>
+<option value="2">Marcos Cine</option>
+<option selected="" value="3">Ricardo Zoom</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+<div class="flex items-center justify-between mb-6 pb-2 border-b border-gray-100">
+<h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">contacts</span>
+                                    Contatos Envolvidos com a Pauta
+                                </h2>
+<button class="text-primary text-sm font-medium hover:bg-primary-50 px-3 py-1.5 rounded transition-colors flex items-center gap-1 border border-transparent hover:border-primary/20" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span> Adicionar Contato
+                                </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex items-start gap-3 p-4 rounded-lg border border-gray-200 bg-gray-50/50 hover:bg-white hover:border-primary/30 transition-all group cursor-pointer relative">
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-gray-400 hover:text-red-500"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+<div class="size-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm shrink-0">
+                                        TM
+                                    </div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-slate-900 truncate">Tenente Marcos</p>
+<p class="text-xs text-slate-500 mb-2 font-medium">Bombeiros - Oficial</p>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 text-xs text-gray-500">
+<span class="material-symbols-outlined text-[14px]">call</span> (11) 99876-5432
+                                            </div>
+<div class="flex items-center gap-1.5 text-xs text-gray-500">
+<span class="material-symbols-outlined text-[14px]">mail</span> marcos.bombeiros@gov.br
+                                            </div>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-3 p-4 rounded-lg border border-gray-200 bg-gray-50/50 hover:bg-white hover:border-primary/30 transition-all group cursor-pointer relative">
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-gray-400 hover:text-red-500"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+<div class="size-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm shrink-0">
+                                        DM
+                                    </div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-slate-900 truncate">Dona Maria</p>
+<p class="text-xs text-slate-500 mb-2 font-medium">Moradora Vizinha</p>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 text-xs text-gray-500">
+<span class="material-symbols-outlined text-[14px]">call</span> (11) 98888-1234
+                                            </div>
+<div class="flex items-center gap-1.5 text-xs text-gray-500">
+<span class="material-symbols-outlined text-[14px]">mail</span> maria.vizinha@email.com
+                                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-1 flex flex-col gap-6">
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+<h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-5 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">timeline</span>
+                                Fluxo de Aprovação
+                            </h2>
+<div class="relative pl-3">
+<div class="absolute left-[19px] top-2 bottom-6 w-0.5 bg-gray-100"></div>
+<div class="relative flex items-start gap-4 mb-6 group">
+<div class="relative z-10 size-8 rounded-full bg-green-500 flex items-center justify-center border-2 border-white shadow-md shadow-green-200 shrink-0">
+<span class="material-symbols-outlined text-white text-[16px]">check</span>
+</div>
+<div class="pt-1">
+<p class="text-sm font-bold text-slate-900">Rascunho</p>
+<p class="text-xs text-gray-500">Criado por Ana Souza <br/> 09:00 - Hoje</p>
+</div>
+</div>
+<div class="relative flex items-start gap-4 mb-6">
+<div class="relative z-10 size-8 rounded-full bg-white border-2 border-primary flex items-center justify-center shadow-md shadow-primary/20 shrink-0">
+<div class="size-2.5 bg-primary rounded-full animate-pulse"></div>
+</div>
+<div class="pt-1">
+<p class="text-sm font-bold text-primary">Em Edição</p>
+<p class="text-xs text-gray-500">Atividade recente...</p>
+</div>
+</div>
+<div class="relative flex items-start gap-4 mb-6 opacity-50">
+<div class="relative z-10 size-8 rounded-full bg-gray-50 border-2 border-gray-200 flex items-center justify-center shrink-0">
+<span class="text-xs font-bold text-gray-400">3</span>
+</div>
+<div class="pt-1">
+<p class="text-sm font-medium text-gray-500">Aprovação</p>
+</div>
+</div>
+<div class="relative flex items-start gap-4 opacity-50">
+<div class="relative z-10 size-8 rounded-full bg-gray-50 border-2 border-gray-200 flex items-center justify-center shrink-0">
+<span class="text-xs font-bold text-gray-400">4</span>
+</div>
+<div class="pt-1">
+<p class="text-sm font-medium text-gray-500">Liberado</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+<h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-5 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+                                Detalhes Técnicos
+                            </h2>
+<div class="space-y-4">
+<div>
+<label class="block text-xs font-semibold text-slate-600 mb-1.5 after:content-['*'] after:ml-0.5 after:text-red-500" for="editorial">Editoria</label>
+<div class="relative">
+<select class="ant-input w-full pl-3 pr-10 py-2 bg-white border border-gray-300 rounded text-sm text-slate-900 focus:outline-none appearance-none cursor-pointer peer" id="editorial" name="editorial" required="">
+<option value="">Selecione...</option>
+<option>Nacional</option>
+<option>Política</option>
+<option selected="">Sociedade</option>
+<option>Desporto</option>
+<option>Mundo</option>
+</select>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none material-symbols-outlined text-[20px]">expand_more</span>
+<p class="mt-1 hidden peer-invalid:flex text-xs text-red-500 items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                                            Selecione uma editoria.
+                                        </p>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-600 mb-1.5 after:content-['*'] after:ml-0.5 after:text-red-500" for="date">Previsão de Veiculação</label>
+<input class="ant-input w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-slate-900 focus:outline-none cursor-pointer peer" id="date" name="date" required="" type="date" value="2023-08-14"/>
+<p class="mt-1 hidden peer-invalid:flex text-xs text-red-500 items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                                        Data inválida.
+                                    </p>
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-600 mb-1.5 after:content-['*'] after:ml-0.5 after:text-red-500" for="priority">Prioridade</label>
+<div class="relative">
+<select class="ant-input w-full pl-9 pr-10 py-2 bg-white border border-gray-300 rounded text-sm text-slate-900 focus:outline-none appearance-none cursor-pointer peer" id="priority" name="priority" required="">
+<option value="">Selecione...</option>
+<option value="high">Urgente</option>
+<option selected="" value="normal">Normal</option>
+<option value="low">Baixa</option>
+</select>
+<div class="absolute left-3 top-1/2 -translate-y-1/2 size-2.5 rounded-full bg-blue-500 ring-2 ring-blue-100"></div>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none material-symbols-outlined text-[20px]">expand_more</span>
+<p class="mt-1 hidden peer-invalid:flex text-xs text-red-500 items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                                            Campo obrigatório.
+                                        </p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+<h2 class="text-base font-bold text-slate-800 mb-6 flex items-center gap-2 pb-2 border-b border-gray-100">
+<span class="material-symbols-outlined text-primary text-[20px]">forum</span>
+                                Comentários Internos
+                            </h2>
+<div class="space-y-5">
+<div class="flex gap-3">
+<img alt="User" class="size-8 rounded-full object-cover shrink-0 ring-2 ring-gray-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7IhTt2MrsNlNhjv8eNVCq9oH-eBBIzOQYbMXBcCMvGSQd5g4lxP1NM5K8iKtIrnD05EwA4CpQIuS8lzzkb8u-rW2u2jfviAMqPpYQwJQH8jfWBKoaCykDkzhs3Od5rFlGtM1BQAD-I-XiPEkeROXM0PKfb-7PEHqvZLYHTME_M51oLw5SJsl1eA-DLEe2-6SV689UpBd1AamIAi2XrXcpY625QKYTxMp2aWDZYuLHu6PKnwqP8Gx54a5btOiFJB1jQWJraHbX3Uc"/>
+<div class="flex-1">
+<div class="bg-gray-50 rounded-lg rounded-tl-none p-3 border border-gray-100 shadow-sm relative">
+<div class="flex items-center justify-between mb-1">
+<span class="text-sm font-semibold text-slate-900">Carlos Mendes</span>
+<span class="text-[10px] uppercase font-bold text-gray-400">2h atrás</span>
+</div>
+<p class="text-sm text-slate-600">Precisamos de imagens aéreas se possível. O helicóptero está disponível?</p>
+</div>
+</div>
+</div>
+<div class="flex gap-3">
+<img alt="User" class="size-8 rounded-full object-cover shrink-0 ring-2 ring-gray-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFhYG2LDnyCf1lMTWvRmyWLE488TegXvUFRp2vk4qjKAvVzUjb2S6USh3vg7EhAwcfI3dKC-nwvXx7oXQ57zxt-HR4RwFVnqGhnBWYmsSFuGsJ7cwJhDwxnIOooREdM7uH-KBkmVKRahDLszAyl4CPVAawfUPoXJgShawRlKGkLkBwGA96Iadtfihqi1KcJ0Qm_M4yJhZ-AlYS7DIGn0mWSNWVVBdDPjgSJmmuvflWEJyBwj4rJLy_UX4PYmD0_lB1NMAcDzBIYQU"/>
+<div class="flex-1">
+<div class="bg-gray-50 rounded-lg rounded-tl-none p-3 border border-gray-100 shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="text-sm font-semibold text-slate-900">Ana Souza</span>
+<span class="text-[10px] uppercase font-bold text-gray-400">1h atrás</span>
+</div>
+<p class="text-sm text-slate-600">Sim, já solicitei a equipe de externa. Vão sobrevoar em 15 minutos.</p>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mt-4 pt-4 border-t border-gray-100">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center shrink-0 text-white font-bold text-xs shadow-md shadow-primary/30">
+                                        EU
+                                    </div>
+<div class="flex-1 flex gap-2">
+<input class="ant-input w-full px-4 py-2 bg-white border border-gray-300 rounded text-sm focus:outline-none transition-all placeholder-gray-400" placeholder="Escreva..." type="text"/>
+<button class="p-2 bg-primary text-white rounded hover:bg-primary-700 transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+<div class="flex items-center justify-between mb-5">
+<h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">history</span>
+                                    Histórico
+                                </h2>
+<button class="text-xs font-bold text-primary hover:text-primary-800 transition-colors" type="button">Ver tudo</button>
+</div>
+<div class="space-y-4 relative">
+<div class="absolute left-[3px] top-1 bottom-1 w-0.5 bg-gray-100"></div>
+<div class="flex gap-3 relative">
+<div class="mt-1.5 size-2 rounded-full bg-gray-400 shrink-0 ring-4 ring-white z-10"></div>
+<div>
+<p class="text-xs text-slate-700 leading-snug"><span class="font-bold text-slate-900">Ana Souza</span> editou a descrição</p>
+<p class="text-[10px] text-gray-400 font-medium">10 min atrás</p>
+</div>
+</div>
+<div class="flex gap-3 relative">
+<div class="mt-1.5 size-2 rounded-full bg-gray-400 shrink-0 ring-4 ring-white z-10"></div>
+<div>
+<p class="text-xs text-slate-700 leading-snug"><span class="font-bold text-slate-900">Carlos Mendes</span> alterou prioridade</p>
+<p class="text-[10px] text-gray-400 font-medium">1 hora atrás</p>
+</div>
+</div>
+<div class="flex gap-3 relative">
+<div class="mt-1.5 size-2 rounded-full bg-green-500 shrink-0 ring-4 ring-white z-10"></div>
+<div>
+<p class="text-xs text-slate-700 leading-snug">Pauta criada</p>
+<p class="text-[10px] text-gray-400 font-medium">Hoje, 09:00</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</form>
+</main>
+</div>
+</div>
+
+</body></html>

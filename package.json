@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^6.1.0",
+    "@supabase/supabase-js": "^2.89.0",
     "@tailwindcss/postcss": "^4.1.18",
     "antd": "^6.1.2",
     "react": "^19.2.3",

@@ -1,10 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MainLayout from '../../components/layout/MainLayout';
 import { useAuth } from '../../context/AuthContext';
+import { dashboardService } from '../../services/dashboardService';
 
 const DashboardPage = () => {
   const { user } = useAuth();
   const userName = user?.email?.split('@')[0] || 'Usuário';
+
+  const [stats, setStats] = useState({ pautas: 0, reportagens: 0, espelhos: 0, contacts: 0 });
+  const [activities, setActivities] = useState([]);
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      try {
+        setLoading(true);
+        const [statsData, activitiesData, teamsData] = await Promise.all([
+          dashboardService.getDashboardStats(),
+          dashboardService.getRecentActivity(),
+          dashboardService.getExternalTeams()
+        ]);
+        setStats(statsData);
+        setActivities(activitiesData);
+        setTeams(teamsData);
+      } catch (error) {
+        console.error('Erro ao carregar dados do dashboard:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDashboardData();
+  }, []);
 
   return (
     <MainLayout>
@@ -52,7 +80,7 @@ const DashboardPage = () => {
             <div>
               <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Pautas do Dia</p>
               <div className="flex items-baseline gap-2 mt-1">
-                <h3 className="text-3xl font-bold text-slate-800">24</h3>
+                <h3 className="text-3xl font-bold text-slate-800">{loading ? '...' : stats.pautas}</h3>
                 <span className="text-xs font-medium text-success flex items-center">
                   <span className="material-symbols-outlined text-[14px]">trending_up</span>
                   +4
@@ -93,7 +121,7 @@ const DashboardPage = () => {
             <div>
               <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Reportagens</p>
               <div className="flex items-baseline gap-2 mt-1">
-                <h3 className="text-3xl font-bold text-slate-800">18</h3>
+                <h3 className="text-3xl font-bold text-slate-800">{loading ? '...' : stats.reportagens}</h3>
               </div>
             </div>
             <div className="size-10 rounded-full bg-blue-50 text-info flex items-center justify-center group-hover:bg-info group-hover:text-white transition-colors">
@@ -128,7 +156,7 @@ const DashboardPage = () => {
             <div>
               <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Espelhos do Dia</p>
               <div className="flex items-baseline gap-2 mt-1">
-                <h3 className="text-3xl font-bold text-slate-800">04</h3>
+                <h3 className="text-3xl font-bold text-slate-800">{loading ? '...' : stats.espelhos}</h3>
               </div>
             </div>
             <div className="size-10 rounded-full bg-red-50 text-error flex items-center justify-center group-hover:bg-error group-hover:text-white transition-colors">
@@ -215,24 +243,22 @@ const DashboardPage = () => {
               </button>
             </div>
             <div className="p-0">
-              <ActivityItem 
-                title='Pauta "Reforma praça" aprovada'
-                desc="O editor chefe aprovou a pauta para produção."
-                meta="Por Ricardo • Há 10 min"
-                type="success"
-              />
-              <ActivityItem 
-                title="Ingest de vídeo concluído"
-                meta="Servidor 2 • Há 45 min"
-                type="info"
-              />
-              <ActivityItem 
-                title="Espelho JT alterado"
-                desc="Bloco 2 movido para final."
-                meta="Roberto F. • Há 1 hora"
-                type="warning"
-                isLast={true}
-              />
+              {loading ? (
+                <div className="p-4 text-center text-xs text-slate-500">Carregando atividades...</div>
+              ) : activities.length === 0 ? (
+                <div className="p-4 text-center text-xs text-slate-500">Nenhuma atividade recente.</div>
+              ) : (
+                activities.map((activity, index) => (
+                  <ActivityItem 
+                    key={activity.id}
+                    title={activity.title}
+                    desc={activity.description}
+                    meta={activity.meta}
+                    type={activity.type}
+                    isLast={index === activities.length - 1}
+                  />
+                ))
+              )}
             </div>
           </div>
 
@@ -243,27 +269,22 @@ const DashboardPage = () => {
               <span className="bg-gray-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-full">3 Ativas</span>
             </div>
             <div className="space-y-4">
-              <TeamItem 
-                name="Equipe 01 (Jornalismo)" 
-                loc="Centro" 
-                status="success" 
-                statusLabel="Livre" 
-                img="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=50&h=50&fit=crop"
-              />
-              <TeamItem 
-                name="Equipe 03 (Ao Vivo)" 
-                loc="Zona Norte" 
-                status="error" 
-                statusLabel="No ar" 
-                img="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop"
-              />
-              <TeamItem 
-                name="Mochilink 02" 
-                loc="Deslocamento" 
-                status="warning" 
-                statusLabel="Trânsito" 
-                img="https://images.unsplash.com/photo-1570126618983-dd752394622b?w=50&h=50&fit=crop"
-              />
+              {loading ? (
+                <div className="text-center text-xs text-slate-500">Carregando equipes...</div>
+              ) : teams.length === 0 ? (
+                <div className="text-center text-xs text-slate-500">Nenhuma equipe ativa.</div>
+              ) : (
+                teams.map((team) => (
+                  <TeamItem 
+                    key={team.id}
+                    name={team.name} 
+                    loc={team.location} 
+                    status={team.status} 
+                    statusLabel={team.status_label} 
+                    img={team.image_url}
+                  />
+                ))
+              )}
             </div>
             <button className="w-full mt-4 py-2 text-xs text-slate-600 font-medium bg-white hover:bg-gray-50 rounded border border-gray-200 transition-colors flex items-center justify-center gap-2">
               <span className="material-symbols-outlined text-[14px]">map</span>
