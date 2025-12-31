@@ -12,6 +12,7 @@ const Sidebar = () => {
     { section: 'Planejamento' },
     { label: 'Pautas', icon: 'article', path: '/pautas' },
     { label: 'Agenda', icon: 'calendar_month', path: '/agenda' },
+    { label: 'Contatos/Fontes', icon: 'contacts', path: '/contatos' },
     { section: 'Produção' },
     { label: 'Reportagens', icon: 'videocam', path: '/reportagens' },
     { label: 'Mídias & Ingest', icon: 'folder_open', path: '/ingest' },
