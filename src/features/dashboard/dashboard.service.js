@@ -9,11 +9,15 @@ export const dashboardService = {
 
     const pautaStats = await pautaService.getStats();
 
+    const { count: reportagensCount } = await supabase
+      .from('reportagens')
+      .select('*', { count: 'exact', head: true });
+
     return {
       pautas: pautaStats.total,
       pautasPending: pautaStats.pending,
       pautasApproved: pautaStats.approved,
-      reportagens: 18, // Mocked
+      reportagens: reportagensCount || 0,
       espelhos: 4, // Mocked
       contacts: contactsCount || 0
     };

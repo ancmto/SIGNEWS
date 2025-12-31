@@ -85,17 +85,22 @@ const Sidebar = () => {
 
   const menuItems = [
     { label: 'Início', icon: 'dashboard', path: '/dashboard', implemented: true },
+    
     { section: 'Planejamento' },
-    { label: 'Pautas', icon: 'article', path: '/pautas', implemented: true },
+    { label: 'Pautas', icon: 'article', path: '/planejamento/pautas', implemented: true },
     { label: 'Agenda', icon: 'calendar_month', path: '/agenda', implemented: false },
     { label: 'Contatos/Fontes', icon: 'contacts', path: '/contatos', implemented: true },
+    
     { section: 'Produção' },
-    { label: 'Reportagens', icon: 'videocam', path: '/reportagens', implemented: false },
+    { label: 'Reportagens', icon: 'videocam', path: '/producao/reportagens', implemented: true },
     { label: 'Mídias & Ingest', icon: 'folder_open', path: '/ingest', implemented: false },
+    
     { section: 'Exibição' },
     { label: 'Espelhos', icon: 'view_timeline', path: '/espelhos', implemented: false },
     { label: 'Teleprompter', icon: 'live_tv', path: '/tp', implemented: false },
-    { section: 'Administração' },
+
+    { section: 'Sistema' },
+    { label: 'Lixeira Global', icon: 'delete', path: '/sistema/lixeira', implemented: true },
     { label: 'Configurações', icon: 'settings', path: '/settings', implemented: false },
   ];
 

@@ -96,3 +96,35 @@
     padding: 12px 20px 4px;
     transition: opacity 0.2s;
 }
+
+/* Custom Tabs for Lixeira */
+.custom-tabs-lixeira .ant-tabs-nav {
+    margin-bottom: 0 !important;
+}
+.custom-tabs-lixeira .ant-tabs-nav::before {
+    display: none !important;
+}
+.custom-tabs-lixeira .ant-tabs-tab {
+    padding: 12px 24px !important;
+    margin: 0 !important;
+    transition: all 0.3s !important;
+    border-radius: 6px 6px 0 0 !important;
+}
+.custom-tabs-lixeira .ant-tabs-tab-active {
+    background-color: #f3eafa !important;
+}
+.custom-tabs-lixeira .ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #7f13ec !important;
+}
+.custom-tabs-lixeira .ant-tabs-ink-bar {
+    background: #7f13ec !important;
+    height: 3px !important;
+}
+
+/* Lixeira Table Row Hover */
+.lixeira-table .ant-table-tbody > tr.ant-table-row:hover > td {
+    background-color: #f8fafc !important;
+}
+.lixeira-table .ant-table-tbody > tr.ant-table-row-selected > td {
+    background-color: rgba(127, 19, 236, 0.03) !important;
+}

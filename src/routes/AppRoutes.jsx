@@ -10,6 +10,12 @@ import EditContactPage from '@/features/contacts/EditContactPage';
 import PautasListPage from '@/features/pautas/PautasListPage';
 import PautaFormPage from '@/features/pautas/PautaFormPage';
 
+// --- NOVOS IMPORTS DE REPORTAGENS ---
+import ReportagemListPage from '@/features/reportagens/ReportagemListPage';
+import ReportagemFormPage from '@/features/reportagens/ReportagemFormPage';
+
+import LixeiraGlobal from '@/features/lixeira/LixeiraGlobal';
+
 // Simple placeholder for other routes
 const Placeholder = ({ title }) => (
   <div className="h-screen flex flex-col items-center justify-center bg-gray-50">
@@ -30,10 +36,22 @@ const AppRoutes = () => {
       <Route path="/contatos/editar/:id" element={<EditContactPage />} />
       
       {/* Pautas Routes */}
-      <Route path="/pautas" element={<PautasListPage />} />
-      <Route path="/pautas/nova" element={<PautaFormPage />} />
-      <Route path="/pautas/editar/:id" element={<PautaFormPage />} />
+      <Route path="/pautas" element={<Navigate to="/planejamento/pautas" />} />
+      <Route path="/planejamento/pautas" element={<PautasListPage />} />
+      <Route path="/planejamento/pautas/nova" element={<PautaFormPage />} />
+      <Route path="/planejamento/pautas/editar/:id" element={<PautaFormPage />} />
+
+
+      {/* --- ROTAS DE REPORTAGENS --- */}
+      <Route path="/reportagens" element={<Navigate to="/producao/reportagens" />} />
+      <Route path="/producao/reportagens" element={<ReportagemListPage />} />
+      <Route path="/producao/reportagens/nova" element={<ReportagemFormPage />} />
+      <Route path="/producao/reportagens/editar/:id" element={<ReportagemFormPage />} />
+
+      {/* Sistema */}
+      <Route path="/sistema/lixeira" element={<LixeiraGlobal />} />
       
+      {/* Configuração Routes */}
       <Route path="/register" element={<Placeholder title="Cadastro de Usuário" />} />
       <Route path="/forgot-password" element={<Placeholder title="Recuperar Senha" />} />
       

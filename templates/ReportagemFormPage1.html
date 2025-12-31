@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="light" lang="pt"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SGI - Reportagens - Cadastro/Edição</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#7f13ec",
+                        "primary-hover": "#6910c4",
+                        "primary-light": "#f2e8ff",
+                        "background-light": "#f0f2f5", // Ant Design style grey background
+                        "background-dark": "#001529", // Ant Design style dark sidebar
+                        "surface-white": "#ffffff",
+                    },
+                    fontFamily: {
+                        "sans": ["Inter", "system-ui", "-apple-system", "sans-serif"],
+                    },
+                    boxShadow: {
+                        "ant": "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)",
+                        "ant-hover": "0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d9d9d9; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #bfbfbf; }
+        .ant-input { transition: all 0.2s; }
+        .ant-input:hover { border-color: #7f13ec; }
+        .ant-input:focus { border-color: #7f13ec; box-shadow: 0 0 0 2px rgba(127, 19, 236, 0.2); outline: none; }.step-line {
+            position: absolute;
+            top: 2rem;
+            left: 1rem;
+            bottom: -1rem;
+            width: 1px;
+            background-color: #f0f0f0;
+            z-index: 0;
+        }
+        .step-item:last-child .step-line { display: none; }
+    </style>
+</head>
+<body class="bg-background-light text-slate-800 font-sans h-screen flex overflow-hidden">
+<aside class="w-64 bg-[#001529] flex flex-col h-full shrink-0 z-30 shadow-xl text-white transition-all">
+<div class="h-16 flex items-center px-5 bg-[#002140] shrink-0 border-b border-slate-700/50 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center font-bold text-white shadow-lg shadow-primary/40">E</div>
+<div class="flex flex-col">
+<h1 class="text-white font-semibold tracking-tight text-base">SGI <span class="text-xs font-normal opacity-60 ml-1">v3.0</span></h1>
+<span class="text-[10px] text-slate-400 font-medium tracking-wide uppercase">Eco TV NCRS</span>
+</div>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto py-4 flex flex-col gap-0.5">
+<a class="flex items-center gap-3 px-5 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm">Dashboard</span>
+</a>
+<div class="flex flex-col">
+<a class="flex items-center gap-3 px-5 py-3 text-white bg-primary transition-all duration-200 shadow-md shadow-primary/20" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">edit_document</span>
+<span class="text-sm font-medium">Produção</span>
+<span class="material-symbols-outlined ml-auto text-[18px]">expand_less</span>
+</a>
+<div class="flex flex-col bg-[#000c17] py-1 shadow-inner">
+<a class="flex items-center pl-12 pr-5 py-2.5 text-sm text-primary font-medium bg-primary/10 border-r-2 border-primary transition-colors" href="#">
+                        Reportagens
+                    </a>
+<a class="flex items-center pl-12 pr-5 py-2.5 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors" href="#">
+                        Roteiros
+                    </a>
+<a class="flex items-center pl-12 pr-5 py-2.5 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors" href="#">
+                        Ingest
+                    </a>
+</div>
+</div>
+<a class="flex items-center gap-3 px-5 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">folder_open</span>
+<span class="text-sm">Arquivo</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm">Configurações</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-700/30 bg-[#001529]">
+<div class="flex items-center gap-3 p-2 rounded-md hover:bg-white/5 cursor-pointer transition-colors">
+<div class="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-xs font-bold border border-slate-500">JD</div>
+<div class="overflow-hidden">
+<div class="text-sm font-medium truncate">João D.</div>
+<div class="text-[10px] text-slate-400 truncate">Editor Chefe</div>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0 bg-[#f0f2f5] relative">
+<header class="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between shadow-sm z-20">
+<div class="flex items-center gap-2 text-sm text-slate-500">
+<a class="hover:text-primary transition-colors" href="#">Produção</a>
+<span class="material-symbols-outlined text-[14px] text-slate-300">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Reportagens</a>
+<span class="material-symbols-outlined text-[14px] text-slate-300">chevron_right</span>
+<span class="text-slate-800 font-semibold">Cadastro de Reportagem</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="absolute inset-y-0 left-3 flex items-center material-symbols-outlined text-slate-400 text-[18px]">search</span>
+<input class="pl-9 pr-4 py-1.5 text-sm border border-slate-200 rounded-md w-64 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-slate-50 hover:bg-white" placeholder="Pesquisar..." type="text"/>
+</div>
+<button class="relative p-2 text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-6 md:p-8">
+<div class="max-w-[1400px] mx-auto space-y-6">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+<div>
+<h2 class="text-2xl font-bold text-slate-800 tracking-tight">Nova Reportagem</h2>
+<p class="text-slate-500 text-sm mt-1">Preencha os dados da reportagem e vincule à pauta correspondente.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 bg-white border border-slate-300 text-slate-600 text-sm font-medium rounded-md hover:bg-slate-50 hover:text-slate-800 transition shadow-sm">
+                            Cancelar
+                        </button>
+<button class="px-4 py-2 bg-white border border-primary text-primary text-sm font-medium rounded-md hover:bg-primary-light transition shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">save</span>
+                             Salvar Rascunho
+                        </button>
+<button class="px-5 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-primary-hover shadow-lg shadow-primary/20 transition flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">send</span>
+                             Submeter Aprovação
+                        </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<div class="lg:col-span-8 flex flex-col gap-6">
+<div class="bg-white rounded-lg shadow-ant border border-slate-100 p-6 flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-slate-700">Título da Reportagem <span class="text-red-500">*</span></label>
+<input class="ant-input w-full rounded-md border-slate-300 text-base py-2 px-3 placeholder:text-slate-300 font-semibold text-slate-800" placeholder="Insira o título principal da matéria" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between">
+<label class="text-sm font-medium text-slate-700">Lead (Resumo)</label>
+<span class="text-xs text-slate-400">0/250</span>
+</div>
+<textarea class="ant-input w-full rounded-md border-slate-300 text-sm py-2 px-3 placeholder:text-slate-300 resize-none" placeholder="Resumo para o apresentador..." rows="3"></textarea>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-slate-700">Texto da Matéria</label>
+<div class="border border-slate-300 rounded-md overflow-hidden flex flex-col focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+<div class="bg-slate-50 border-b border-slate-200 p-2 flex items-center gap-1 flex-wrap">
+<button class="p-1.5 hover:bg-slate-200 rounded text-slate-600"><span class="material-symbols-outlined text-[18px]">format_bold</span></button>
+<button class="p-1.5 hover:bg-slate-200 rounded text-slate-600"><span class="material-symbols-outlined text-[18px]">format_italic</span></button>
+<button class="p-1.5 hover:bg-slate-200 rounded text-slate-600"><span class="material-symbols-outlined text-[18px]">format_underlined</span></button>
+<div class="w-px h-5 bg-slate-300 mx-1"></div>
+<button class="p-1.5 hover:bg-slate-200 rounded text-slate-600"><span class="material-symbols-outlined text-[18px]">format_list_bulleted</span></button>
+<div class="flex-1"></div>
+<button class="text-xs text-primary font-medium hover:underline px-2">Expandir</button>
+</div>
+<div class="min-h-[300px] p-4 outline-none text-slate-700 text-sm leading-relaxed" contenteditable="true">
+<p class="text-slate-400">Comece a escrever sua reportagem aqui...</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-ant border border-slate-100 p-6">
+<h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400">history</span> Versionamento Recente
+                            </h3>
+<div class="space-y-4">
+<div class="flex gap-3 items-start pb-4 border-b border-slate-100 last:border-0 last:pb-0">
+<div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600">JD</div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-sm font-medium text-slate-900">Versão Atual (Rascunho)</span>
+<span class="text-xs text-slate-400">Agora</span>
+</div>
+<p class="text-xs text-slate-500 mt-0.5">Editado por João D.</p>
+</div>
+</div>
+<div class="flex gap-3 items-start opacity-60">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">V1</div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-sm font-medium text-slate-900">Versão Inicial</span>
+<span class="text-xs text-slate-400">Há 2h</span>
+</div>
+<p class="text-xs text-slate-500 mt-0.5">Criado por Maria R.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-4 flex flex-col gap-6">
+<div class="bg-white rounded-lg shadow-ant border border-slate-100 p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-sm font-bold text-slate-800">Estado Editorial</h3>
+<span class="px-2 py-1 bg-blue-50 text-blue-600 border border-blue-100 rounded text-xs font-semibold uppercase tracking-wide">Em Produção</span>
+</div>
+<div class="relative pl-2 flex flex-col gap-0">
+<div class="flex gap-3 relative pb-8 step-item">
+<div class="step-line"></div>
+<div class="z-10 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shadow-md shadow-primary/30 shrink-0">
+<span class="material-symbols-outlined text-[16px]">edit_document</span>
+</div>
+<div class="pt-1">
+<p class="text-sm font-bold text-slate-800">Produção</p>
+<p class="text-xs text-slate-500">Em andamento</p>
+</div>
+</div>
+<div class="flex gap-3 relative pb-8 step-item">
+<div class="step-line"></div>
+<div class="z-10 w-8 h-8 rounded-full bg-white border-2 border-slate-200 text-slate-300 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+</div>
+<div class="pt-1">
+<p class="text-sm font-medium text-slate-400">Revisão</p>
+<p class="text-xs text-slate-400">Aguardando envio</p>
+</div>
+</div>
+<div class="flex gap-3 relative step-item">
+<div class="z-10 w-8 h-8 rounded-full bg-white border-2 border-slate-200 text-slate-300 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+</div>
+<div class="pt-1">
+<p class="text-sm font-medium text-slate-400">Aprovação Final</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-ant border border-slate-100 p-6 flex flex-col gap-5">
+<h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">Dados da Reportagem</h3>
+<div class="flex flex-col gap-1.5 p-3 bg-red-50/50 rounded-md border border-red-100">
+<label class="text-xs font-bold text-red-800 uppercase flex items-center gap-1" for="pauta">
+                                    Pauta Vinculada <span class="material-symbols-outlined text-[14px]">link</span>
+</label>
+<div class="relative">
+<select class="ant-input w-full text-sm rounded-md border-red-200 focus:border-red-500 focus:ring-red-200 bg-white" id="pauta" required="">
+<option disabled="" selected="" value="">Selecione a Pauta (Obrigatório)...</option>
+<option value="1">PT-901: Chuvas Região Sul</option>
+<option value="2">PT-902: Eleições Municipais</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-500 uppercase">Programa</label>
+<select class="ant-input w-full text-sm rounded-md border-slate-300">
+<option value="jn">Jornal da Noite</option>
+<option value="bd">Bom Dia Eco</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-500 uppercase">Repórter</label>
+<select class="ant-input w-full text-sm rounded-md border-slate-300">
+<option>Ana Silva</option>
+<option>Carlos M.</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-500 uppercase">Editor</label>
+<select class="ant-input w-full text-sm rounded-md border-slate-300">
+<option>João D.</option>
+<option>Sofia P.</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-500 uppercase">Duração Est.</label>
+<div class="relative">
+<span class="absolute left-3 top-2 text-slate-400 material-symbols-outlined text-[18px]">timer</span>
+<input class="ant-input w-full pl-9 text-sm rounded-md border-slate-300" placeholder="00:00:00" type="text"/>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-ant border border-slate-100 p-6 flex flex-col gap-4">
+<h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">folder_shared</span> Multimédia (NAS)
+                            </h3>
+<div class="flex flex-col gap-1">
+<label class="text-[10px] uppercase font-bold text-slate-500">Vídeo</label>
+<div class="flex">
+<input class="w-full text-xs bg-slate-50 border border-slate-200 rounded-l-md text-slate-600 px-2 py-1.5 outline-none cursor-not-allowed" readonly="" type="text" value="\\nas01\prod\video\rep_089"/>
+<button class="bg-white border border-l-0 border-slate-200 rounded-r-md px-2 hover:bg-slate-50 text-slate-500"><span class="material-symbols-outlined text-[16px]">folder</span></button>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-[10px] uppercase font-bold text-slate-500">Áudio</label>
+<div class="flex">
+<input class="w-full text-xs bg-slate-50 border border-slate-200 rounded-l-md text-slate-600 px-2 py-1.5 outline-none cursor-not-allowed" readonly="" type="text" value="\\nas01\prod\audio\rep_089"/>
+<button class="bg-white border border-l-0 border-slate-200 rounded-r-md px-2 hover:bg-slate-50 text-slate-500"><span class="material-symbols-outlined text-[16px]">folder</span></button>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-[10px] uppercase font-bold text-slate-500">Imagens</label>
+<div class="flex">
+<input class="w-full text-xs bg-slate-50 border border-slate-200 rounded-l-md text-slate-400 px-2 py-1.5 outline-none cursor-not-allowed" placeholder="Não vinculado" readonly="" type="text" value=""/>
+<button class="bg-white border border-l-0 border-slate-200 rounded-r-md px-2 hover:bg-slate-50 text-slate-500"><span class="material-symbols-outlined text-[16px]">folder</span></button>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-ant border border-slate-100 flex flex-col overflow-hidden">
+<div class="p-3 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
+<h3 class="text-xs font-bold text-slate-700 uppercase">Comentários</h3>
+<span class="bg-primary text-white text-[10px] px-1.5 rounded-full font-bold">2</span>
+</div>
+<div class="p-4 max-h-[200px] overflow-y-auto space-y-3 bg-white">
+<div class="flex gap-2">
+<div class="w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-[10px] font-bold shrink-0">SP</div>
+<div class="bg-slate-50 p-2 rounded-lg rounded-tl-none border border-slate-100 text-xs w-full">
+<span class="font-bold text-slate-700 block mb-0.5">Sofia P.</span>
+<span class="text-slate-600">Verificar grafia do nome.</span>
+</div>
+</div>
+<div class="flex gap-2">
+<div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold shrink-0">CM</div>
+<div class="bg-slate-50 p-2 rounded-lg rounded-tl-none border border-slate-100 text-xs w-full">
+<span class="font-bold text-slate-700 block mb-0.5">Carlos M.</span>
+<span class="text-slate-600">Imagens de drone adicionadas.</span>
+</div>
+</div>
+</div>
+<div class="p-2 border-t border-slate-100 bg-white">
+<div class="flex gap-2 relative">
+<input class="w-full text-xs border-slate-200 rounded-full pl-3 pr-8 py-1.5 focus:border-primary focus:ring-primary/20" placeholder="Escreva um comentário..." type="text"/>
+<button class="absolute right-1 top-1 text-primary hover:bg-primary/10 p-0.5 rounded-full"><span class="material-symbols-outlined text-[16px]">send</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>
