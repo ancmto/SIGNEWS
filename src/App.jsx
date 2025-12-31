@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
-import { themeConfig } from './styles/theme';
-import { AuthProvider } from './context/AuthContext';
+import { themeConfig } from '@/components/common/theme';
+import { AuthProvider } from '@/components/common/AuthContext';
 import AppRoutes from './routes/AppRoutes';
 
 const App = () => {

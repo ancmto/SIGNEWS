@@ -1,0 +1,50 @@
+.loginPageContainer {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.loginHeroSection {
+  background-size: cover;
+  background-position: center;
+  padding: 3rem;
+}
+
+.loginFormSide {
+  padding: 2rem;
+}
+
+.loginCard {
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 28rem;
+}
+
+.loginLogoHeader {
+  margin-bottom: 2rem;
+}
+
+.loginDivider {
+  position: relative;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.loginRegisterLink {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.loginSecurityNotice {
+  margin-top: 2rem;
+}
+
+.loginFooterText {
+  margin-top: 2rem;
+}
+
+/* Specific heights and layout adjustments that Tailwind might miss or need custom precision */
+@media (max-width: 1024px) {
+  .loginHeroSection {
+    display: none;
+  }
+}

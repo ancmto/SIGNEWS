@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase } from '@/components/common/supabase';
 
 export const contactsService = {
   async getContacts() {

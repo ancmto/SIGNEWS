@@ -1,11 +1,14 @@
 import React from 'react';
 import { Routes, Route, Navigate, Link } from 'react-router-dom';
-import LoginPage from '../pages/Login/LoginPage';
-import DashboardPage from '../pages/Dashboard/DashboardPage';
+import LoginPage from '@/features/auth/LoginPage';
+import DashboardPage from '@/features/dashboard/DashboardPage';
 
-import ContactsPage from '../pages/Contacts/ContactsPage';
-import AddContactPage from '../pages/Contacts/AddContactPage';
-import EditContactPage from '../pages/Contacts/EditContactPage';
+import ContactsPage from '@/features/contacts/ContactsPage';
+import AddContactPage from '@/features/contacts/AddContactPage';
+import EditContactPage from '@/features/contacts/EditContactPage';
+
+import PautasListPage from '@/features/pautas/PautasListPage';
+import PautaFormPage from '@/features/pautas/PautaFormPage';
 
 // Simple placeholder for other routes
 const Placeholder = ({ title }) => (
@@ -26,15 +29,14 @@ const AppRoutes = () => {
       <Route path="/contatos/novo" element={<AddContactPage />} />
       <Route path="/contatos/editar/:id" element={<EditContactPage />} />
       
+      {/* Pautas Routes */}
+      <Route path="/pautas" element={<PautasListPage />} />
+      <Route path="/pautas/nova" element={<PautaFormPage />} />
+      <Route path="/pautas/editar/:id" element={<PautaFormPage />} />
+      
       <Route path="/register" element={<Placeholder title="Cadastro de Usuário" />} />
       <Route path="/forgot-password" element={<Placeholder title="Recuperar Senha" />} />
       
-// Adicione os novos caminhos dentro do MainLayout
-<Route path="pautas" element={<PautasListPage />} />
-<Route path="pautas/nova" element={<PautaFormPage />} />
-<Route path="pautas/editar/:id" element={<PautaFormPage />} />
-
-
       {/* Default redirect to login for now */}
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>

@@ -53,9 +53,24 @@
     font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   }
 
-  /* Custom utility for sidebar background if utility generation fails */
   .bg-menu-dark {
     background-color: var(--color-menu-dark);
+  }
+
+  /* Custom scrollbar for dark sidebars */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
   }
 }
 
@@ -73,10 +88,11 @@
 }
 
 .sidebar-section-label {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: rgba(255, 255, 255, 0.45);
-    padding: 16px 24px 8px;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.25);
+    padding: 12px 20px 4px;
+    transition: opacity 0.2s;
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import MainLayout from '../../components/layout/MainLayout';
-import { contactsService } from '../../services/contactsService';
+import MainLayout from '@/components/shared/MainLayout';
+import { contactsService } from './contacts.service';
 
 const EditContactPage = () => {
   const navigate = useNavigate();

@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import MainLayout from '../../components/layout/MainLayout';
-import { useAuth } from '../../context/AuthContext';
-import { dashboardService } from '../../services/dashboardService';
+import { useNavigate } from 'react-router-dom';
+import MainLayout from '@/components/shared/MainLayout';
+import { useAuth } from '@/components/common/AuthContext';
+import { dashboardService } from './dashboard.service';
+import styles from './dashboard.module.css';
 
 const DashboardPage = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const userName = user?.email?.split('@')[0] || 'Usuário';
 
-  const [stats, setStats] = useState({ pautas: 0, reportagens: 0, espelhos: 0, contacts: 0 });
+  const [stats, setStats] = useState({ pautas: 0, pautasPending: 0, pautasApproved: 0, reportagens: 0, espelhos: 0, contacts: 0 });
   const [activities, setActivities] = useState([]);
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,14 +39,18 @@ const DashboardPage = () => {
 
   return (
     <MainLayout>
-      {/* GREETING & ACTIONS */}
+      <div className={styles.container}>
+        {/* GREETING & ACTIONS */}
       <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center bg-white p-6 rounded-lg border border-gray-100 shadow-card">
         <div>
           <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Olá, {userName}! 👋</h2>
           <p className="text-slate-500 text-sm mt-1">Aqui está o panorama geral da produção hoje.</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <button className="inline-flex items-center gap-2 bg-primary hover:bg-primary-hover text-white text-sm font-medium px-4 py-2 rounded-md shadow-sm shadow-purple-200 transition-all hover:-translate-y-0.5">
+          <button 
+            onClick={() => navigate('/pautas/nova')}
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-hover text-white text-sm font-medium px-4 py-2 rounded-md shadow-sm shadow-purple-200 transition-all hover:-translate-y-0.5"
+          >
             <span className="material-symbols-outlined text-[18px]">add</span>
             Nova Pauta
           </button>
@@ -95,10 +102,13 @@ const DashboardPage = () => {
             <div>
               <div className="flex justify-between text-xs mb-1.5">
                 <span className="text-slate-600 font-medium">Pendentes / Em Análise</span>
-                <span className="font-bold text-slate-800">16</span>
+                <span className="font-bold text-slate-800">{loading ? '...' : stats.pautasPending}</span>
               </div>
               <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-orange-400 w-[66%] rounded-full relative overflow-hidden">
+                <div 
+                  className="h-full bg-orange-400 rounded-full relative overflow-hidden transition-all duration-500"
+                  style={{ width: `${stats.pautas > 0 ? (stats.pautasPending / stats.pautas) * 100 : 0}%` }}
+                >
                   <div className="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]"></div>
                 </div>
               </div>
@@ -106,10 +116,13 @@ const DashboardPage = () => {
             <div>
               <div className="flex justify-between text-xs mb-1.5">
                 <span className="text-slate-600 font-medium">Aprovadas</span>
-                <span className="font-bold text-slate-800">8</span>
+                <span className="font-bold text-slate-800">{loading ? '...' : stats.pautasApproved}</span>
               </div>
               <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-success w-[33%] rounded-full"></div>
+                <div 
+                  className="h-full bg-success rounded-full transition-all duration-500"
+                  style={{ width: `${stats.pautas > 0 ? (stats.pautasApproved / stats.pautas) * 100 : 0}%` }}
+                ></div>
               </div>
             </div>
           </div>
@@ -292,6 +305,7 @@ const DashboardPage = () => {
             </button>
           </div>
         </div>
+      </div>
       </div>
     </MainLayout>
   );

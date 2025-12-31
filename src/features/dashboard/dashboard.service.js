@@ -1,15 +1,18 @@
-import { supabase } from './supabase';
+import { supabase } from '@/components/common/supabase';
+import { pautaService } from '@/features/pautas/pauta.service';
 
 export const dashboardService = {
   async getDashboardStats() {
-    // In a real app, these might come from specific tables or counts
-    // For now, we return some counts based on our tables where possible
     const { count: contactsCount } = await supabase
       .from('contacts')
       .select('*', { count: 'exact', head: true });
 
+    const pautaStats = await pautaService.getStats();
+
     return {
-      pautas: 24, // Mocked for now until pautas table exists
+      pautas: pautaStats.total,
+      pautasPending: pautaStats.pending,
+      pautasApproved: pautaStats.approved,
       reportagens: 18, // Mocked
       espelhos: 4, // Mocked
       contacts: contactsCount || 0
