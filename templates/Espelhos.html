@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SGI - Editar Espelho (Refatorado v4)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#7f13ec",
+                        "primary-hover": "#6810c1",
+                        "primary-light": "#f2e6ff",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#191022",
+                        "sidebar-dark": "#120b18",
+                        "success": "#10b981",
+                        "warning": "#f59e0b",
+                        "danger": "#ef4444",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d9d9d9;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #bfbfbf;
+        }
+        .ant-input {
+            transition: all 0.3s;
+        }
+        .ant-input:hover {
+            border-color: #7f13ec;
+        }
+        .ant-input:focus {
+            border-color: #7f13ec;
+            box-shadow: 0 0 0 2px rgba(127, 19, 236, 0.2);
+        }
+        .drag-handle {
+            cursor: grab;
+        }
+        .drag-handle:active {
+            cursor: grabbing;
+        }.rundown-grid {
+            display: grid;grid-template-columns: 32px 32px 60px 1fr 90px 90px 90px 70px 80px 110px;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        @media (max-width: 1400px) {
+            .rundown-grid {grid-template-columns: 32px 32px 60px 1fr 80px 80px 70px 110px;
+            }
+            .hide-compact {
+                display: none;
+            }
+        }
+        .drag-ghost {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.9;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+            transform: rotate(2deg);
+            width: 800px;
+            background: white;
+            border: 1px solid #7f13ec;
+            border-radius: 0.5rem;
+        }
+        .drop-target-active {
+            border: 2px dashed #7f13ec !important;
+            background-color: rgba(127, 19, 236, 0.05) !important;
+            position: relative;
+        }
+        .drop-target-indicator {
+            height: 4px;
+            background-color: #7f13ec;
+            border-radius: 2px;
+            margin: 4px 0;
+            position: relative;
+        }
+        .drop-target-indicator::before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: -3px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #7f13ec;
+        }.time-field {
+            @apply bg-slate-50 border border-slate-300 rounded px-1 text-[10px] font-mono text-center text-slate-700 focus:border-primary focus:ring-1 focus:ring-primary outline-none h-5;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-slate-900 font-display overflow-hidden h-screen flex">
+<aside class="w-64 bg-sidebar-dark flex flex-col h-full shrink-0 border-r border-slate-800 z-20 hidden md:flex">
+<div class="h-16 flex items-center px-6 border-b border-slate-800">
+<div class="flex items-center gap-3">
+<div class="bg-primary aspect-square rounded-lg size-8 flex items-center justify-center text-white font-bold text-lg">S</div>
+<div class="flex flex-col">
+<h1 class="text-white text-base font-bold leading-none tracking-tight">SGI</h1>
+<span class="text-slate-400 text-[10px] font-medium tracking-wider uppercase mt-1">Newsroom</span>
+</div>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto py-4 px-3 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">dashboard</span>
+<span class="text-sm font-medium">Painel</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">calendar_month</span>
+<span class="text-sm font-medium">Planejamento</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">video_camera_front</span>
+<span class="text-sm font-medium">Produção</span>
+</a>
+<div class="flex flex-col gap-1 mt-2 mb-2">
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-primary text-white shadow-lg shadow-primary/20" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]">format_list_bulleted</span>
+<span class="text-sm font-medium">Espelhos</span>
+</div>
+<span class="material-symbols-outlined text-[18px]">expand_less</span>
+</a>
+<div class="flex flex-col pl-10 pr-2 gap-1 mt-1 border-l border-slate-700 ml-5">
+<a class="block py-2 text-sm text-primary font-medium" href="#">Criar/Editar</a>
+<a class="block py-2 text-sm text-slate-400 hover:text-white transition-colors" href="#">Modelos</a>
+<a class="block py-2 text-sm text-slate-400 hover:text-white transition-colors" href="#">Histórico</a>
+</div>
+</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">folder_open</span>
+<span class="text-sm font-medium">Arquivo</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">settings</span>
+<span class="text-sm font-medium">Configurações</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-cover bg-center border border-slate-600" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD1ffkejQBAJyGV3PyEjDlokHyis8AFVE_h19FsUJH135bO3hPzjIRK1LXykfvNBf4mIW-dCHcp6nCh-vr8sjtVR1z-Bj329G8uyt0xbLzpq7mZDSEEyZAyRU4gA7tP3tKVHJwXb10Z95FPc8DMlUjb7qHBLByKsVK72guoGW68ObB8HJCylNnzA_cS01aeOval_lZ9hYBM-xS0fI_DMogmU5-ZS_VFk_0gSmIclfarnulKXR1KeQVYpVBUZTbbIrjqJ-3F7k4Crx0');"></div>
+<div class="flex flex-col overflow-hidden">
+<span class="text-sm font-medium text-white truncate">Ana Silva</span>
+<span class="text-xs text-slate-500 truncate">Produtora Executiva</span>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-[#f0f2f5] relative">
+<div class="h-8 bg-sidebar-dark text-slate-400 text-xs font-mono flex items-center justify-end px-6 border-b border-slate-800 shrink-0 z-20">
+<div class="flex items-center gap-4">
+<span>SÃO PAULO</span>
+<span class="text-white font-bold">15:42:30</span>
+<span class="text-slate-500">|</span>
+<span>24 OUT 2023</span>
+</div>
+</div>
+<header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 shrink-0 shadow-sm z-10 relative">
+<div class="flex items-center gap-4 text-sm text-slate-500">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Espelhos</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-slate-900 font-medium">Jornal da Noite #1245</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 bg-yellow-50 border border-yellow-200 rounded-full mr-4">
+<span class="size-2 rounded-full bg-yellow-500 animate-pulse"></span>
+<span class="text-xs font-bold text-yellow-700 uppercase tracking-wide">Rascunho</span>
+</div>
+<button class="size-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-primary/10 hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-white"></span>
+</button>
+</div>
+</header>
+<div class="flex-1 flex overflow-hidden">
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-100/50 relative">
+<div class="bg-white border-b border-gray-200 shrink-0 z-20 shadow-sm">
+<div class="px-6 py-4 flex flex-col gap-4">
+<div class="grid grid-cols-12 gap-4">
+<div class="col-span-2">
+<label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1 block">Data de Exibição</label>
+<input class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-xs rounded-lg focus:ring-primary focus:border-primary block p-2 ant-input" type="date" value="2023-10-24"/>
+</div>
+<div class="col-span-3">
+<label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1 block">Programa</label>
+<select class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-xs rounded-lg focus:ring-primary focus:border-primary block p-2 ant-input">
+<option>Jornal da Noite</option>
+<option>Jornal do Meio Dia</option>
+</select>
+</div>
+<div class="col-span-7">
+<label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1 block">Apresentador(es)</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-base">group</span>
+<input class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-xs rounded-lg focus:ring-primary focus:border-primary block pl-8 p-2 ant-input" type="text" value="Ana Paula / Ricardo M."/>
+</div>
+</div>
+<div class="col-span-2 flex items-end pb-1">
+<div class="flex items-center bg-slate-100 p-1 rounded-lg w-full">
+<button class="flex-1 py-1 px-2 rounded text-[10px] font-bold transition-all text-slate-500 hover:text-slate-700">GRAV</button>
+<button class="flex-1 py-1 px-2 rounded bg-red-500 text-white shadow-sm text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1">
+<span class="size-1.5 bg-white rounded-full animate-pulse"></span> Vivo
+                                    </button>
+</div>
+</div>
+<div class="col-span-3">
+<label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1 block">Editor Responsável</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-base">person</span>
+<input class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-xs rounded-lg focus:ring-primary focus:border-primary block pl-8 p-2 ant-input" type="text" value="Carlos Silva"/>
+</div>
+</div>
+<div class="col-span-7 flex items-end justify-end gap-2">
+<button class="px-3 py-2 text-xs font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">print</span> Imprimir
+                                </button>
+<button class="px-3 py-2 text-xs font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-red-600 transition-colors">
+                                    Cancelar
+                                </button>
+<button class="px-3 py-2 text-xs font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
+                                    Fechar
+                                </button>
+<button class="flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-primary rounded-lg hover:bg-primary-hover shadow-md shadow-primary/20 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[18px]">save</span> Salvar
+                                </button>
+</div>
+</div>
+</div>
+<div class="bg-background-dark text-white px-6 py-3 border-t border-slate-800">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4 border-r border-white/10 pr-6">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Horário Previsto</span>
+<span class="text-2xl font-mono font-bold text-white leading-none tracking-tight">20:00:00</span>
+</div>
+<span class="material-symbols-outlined text-slate-600 text-[24px]">schedule</span>
+</div>
+<div class="flex items-center gap-8 flex-1 justify-center">
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Tempo Previsto</span>
+<span class="text-lg font-mono font-bold text-slate-200">00:45:00</span>
+</div>
+<div class="flex flex-col items-center relative">
+<span class="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Tempo Corrido</span>
+<span class="text-lg font-mono font-bold text-yellow-400">00:15:20</span>
+<div class="absolute -bottom-2 w-full h-0.5 bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-yellow-400" style="width: 33%"></div>
+</div>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Tempo Real (Est.)</span>
+<span class="text-lg font-mono font-bold text-white">00:16:10</span>
+</div>
+</div>
+<div class="flex items-center gap-3 border-l border-white/10 pl-6">
+<div class="flex flex-col items-end">
+<span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1">
+                                        Diferença <span class="size-2 rounded-full bg-red-500 animate-pulse"></span>
+</span>
+<span class="text-2xl font-mono font-bold text-red-500 leading-none tracking-tight">+00:00:50</span>
+</div>
+<span class="text-[10px] font-bold text-red-400 bg-red-400/10 px-2 py-1 rounded border border-red-400/20">ESTOURO</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4 lg:p-6 pb-20 scroll-smooth">
+<div class="hidden md:grid rundown-grid gap-2 px-4 py-2 mb-2 bg-slate-200/50 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider items-center sticky top-0 z-10 backdrop-blur-sm">
+<div class="text-center">#</div>
+<div class="text-center">Ord</div>
+<div>Tipo</div>
+<div>Slug / Detalhes</div>
+<div class="hide-compact">Talento</div>
+<div class="hide-compact">Repórter</div>
+<div class="hide-compact">Ed. Vídeo</div>
+<div>Origem</div>
+<div class="text-right">Duração</div>
+<div class="text-center">Status</div>
+</div>
+<div class="bg-white rounded-lg border border-slate-200 shadow-sm mb-6 overflow-hidden">
+<div class="bg-slate-50 border-b border-slate-200 px-4 py-3 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors sticky top-0 z-10">
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-bold uppercase px-2 py-1 rounded shadow-sm transition-colors" title="Start Block Timer">
+<span class="material-symbols-outlined text-[14px]">play_arrow</span> Start
+                                </button>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600">expand_circle_down</span>
+<span class="font-bold text-slate-700">BLOCO 1 - ABERTURA E MANCHETES</span>
+<span class="text-xs bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-mono font-medium">15:00</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] text-slate-400 font-medium uppercase mr-2">3 itens</span>
+<button class="p-1 rounded hover:bg-slate-200 text-slate-400 hover:text-slate-600"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</div>
+</div>
+<div class="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-4 shadow-sm relative z-0">
+<span class="text-sm font-bold text-slate-700 uppercase">Adicionar:</span>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all text-sm font-medium bg-white">
+<span class="material-symbols-outlined text-blue-500 text-[18px]">article</span> Matéria
+        </button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all text-sm font-medium bg-white">
+<span class="material-symbols-outlined text-red-500 text-[18px]">videocam</span> Vivo
+        </button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all text-sm font-medium bg-white">
+<span class="material-symbols-outlined text-orange-500 text-[18px]">description</span> Nota
+        </button>
+<div class="w-px h-6 bg-slate-200"></div>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all text-sm font-medium bg-slate-100">
+<span class="material-symbols-outlined text-slate-700 text-[18px]">coffee</span> Intervalo
+        </button>
+</div>
+</div>
+<div class="p-2 flex flex-col gap-1 bg-slate-50/30">
+<div class="group relative rundown-grid gap-2 items-center bg-white border border-slate-200 p-2 rounded-md shadow-sm hover:border-primary/50 hover:shadow-md transition-all active:scale-[0.995]">
+<div class="flex items-center justify-center h-full">
+<span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500 drag-handle text-[20px]">drag_indicator</span>
+</div>
+<div class="text-center text-xs font-mono text-slate-400 font-medium">1</div>
+<div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-100 uppercase">
+<span class="material-symbols-outlined text-[12px]">movie</span> VT
+                                    </span>
+</div>
+<div class="flex flex-col min-w-0 pr-2">
+<span class="font-semibold text-slate-800 text-sm truncate">ABERTURA GERAL</span>
+<div class="text-[10px] text-slate-500 truncate">Vinheta padrão do jornal - Versão Longa</div>
+</div>
+<div class="flex items-center gap-2 overflow-hidden hide-compact">
+<div class="size-5 rounded-full bg-cover bg-center shrink-0" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAGKZy3YiNimWqVAiLyH8WhI6TWHQFtiT34y6xkiBW5VopgRsQ9i_Sc6jUA-Gyv-6svBsRZReHGSN-CSpYv9pXqRzeZQYm-h-jktmOrEWeSSCBj1EKrt57bCYT6dlOOXHp4KAUOf1CKrQ_3GLEuHLOttQAVcg9E9dRMxKymlPJK0dzJKJrU-xJK2IyqETKrRNMtrBVwmWFsCkrcrTyGs91eSGpcNghG7ceCGjX_-UWtugEOqLO97FP0CwajJFPMAomojzqw0zIvXg8');"></div>
+<span class="text-xs text-slate-600 truncate">Sistema</span>
+</div>
+<div class="text-xs text-slate-400 hide-compact">-</div>
+<div class="text-xs text-slate-400 hide-compact">M. Souza</div>
+<div>
+<span class="text-[10px] font-mono text-slate-500 bg-slate-100 px-1 rounded border border-slate-200">ARQ</span>
+</div>
+<div class="text-right">
+<span class="font-mono text-sm font-medium text-slate-800">00:00:30</span>
+</div>
+<div class="flex justify-center">
+<button class="flex items-center gap-1 px-2 py-0.5 rounded bg-green-50 text-green-700 border border-green-200 text-[10px] font-bold uppercase hover:bg-green-100 transition-colors">
+        Aprovado <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+</div>
+<div class="group relative rundown-grid gap-2 items-center bg-white border-l-4 border-l-blue-500 border-y border-r border-slate-200 p-2 rounded-r-md shadow-sm hover:border-primary/50 hover:shadow-md transition-all active:scale-[0.995]">
+<div class="flex items-center justify-center h-full">
+<span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500 drag-handle text-[20px]">drag_indicator</span>
+</div>
+<div class="text-center text-xs font-mono text-slate-400 font-medium">2</div>
+<div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 text-[10px] font-bold border border-indigo-100 uppercase">
+<span class="material-symbols-outlined text-[12px]">article</span> REP
+                                    </span>
+</div>
+<div class="flex flex-col min-w-0 pr-2 gap-1">
+<div class="flex items-center justify-between">
+<span class="font-semibold text-slate-800 text-sm truncate">REPORTAGEM CHUVAS ZN</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex bg-slate-100 rounded px-1 py-0.5 border border-slate-200">
+<span class="material-symbols-outlined text-[14px] text-green-500 px-0.5" title="Mídia Existente">videocam</span>
+<span class="w-px h-3 bg-slate-300 mx-0.5"></span>
+<span class="material-symbols-outlined text-[14px] text-slate-300 px-0.5" title="Aprovado (Pendente)">check</span>
+<span class="w-px h-3 bg-slate-300 mx-0.5"></span>
+<span class="material-symbols-outlined text-[14px] text-slate-300 px-0.5" title="Revisado (Pendente)">rate_review</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-1">
+<span class="text-[9px] font-bold text-slate-400 uppercase">Mídia</span>
+<span class="text-[10px] font-mono font-medium text-slate-600">00:02:00</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="text-[9px] font-bold text-slate-400 uppercase">Cab</span>
+<span class="text-[10px] font-mono font-medium text-slate-600">00:00:15</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="text-[9px] font-bold text-slate-400 uppercase">Link</span>
+<span class="text-[10px] font-mono font-medium text-slate-600">00:00:15</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 overflow-hidden hide-compact">
+<div class="size-5 rounded-full bg-cover bg-center shrink-0" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBGOgLindrGfhJZfQb2x1RLmwlq2fPDhQ9ip6HxAdWrDIQuGOrbKuq2xW0rWGkX3Frf-eJrRdmYXsU7Xv9CasnDRGyfN96Wh2R35YCWUKA2i6TVFh85OgX8zjGMbgGzdrIqZXKg7dAuQJ79z_iYdiqLAd6D6U866IRqGoaW2xrUI1WZqaE3m-5wDbYfNSl31l_nLBOX4iNECzsjOiUzZevEi92D3dOUv6-IvQUtXFC3BorVnM9HuloMSyQJpJWEm7K_0bgLRfrJSss');"></div>
+<span class="text-xs text-slate-600 truncate">Carlos M.</span>
+</div>
+<div class="text-xs text-slate-600 truncate hide-compact">F. Lima</div>
+<div class="text-xs text-slate-600 truncate hide-compact">J. Costa</div>
+<div>
+<span class="text-[10px] font-mono text-slate-500 bg-slate-100 px-1 rounded border border-slate-200">MAM</span>
+</div>
+<div class="text-right">
+<span class="font-mono text-sm font-medium text-slate-800">00:02:30</span>
+</div>
+<div class="flex justify-center">
+<button class="flex items-center gap-1 px-2 py-0.5 rounded bg-yellow-50 text-yellow-700 border border-yellow-200 text-[10px] font-bold uppercase hover:bg-yellow-100 transition-colors">
+        Produzindo <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+</div>
+<div class="group relative rundown-grid gap-2 items-center bg-gray-100 border border-gray-300 border-dashed p-1 rounded-md shadow-inner opacity-80">
+<div class="flex items-center justify-center h-full">
+<span class="material-symbols-outlined text-slate-400 drag-handle text-[20px]">drag_indicator</span>
+</div>
+<div class="text-center text-xs font-mono text-slate-400 font-medium">3</div>
+<div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-gray-200 text-gray-700 text-[10px] font-bold border border-gray-300 uppercase">
+                                        BREAK
+                                    </span>
+</div>
+<div class="flex flex-col min-w-0 pr-2">
+<span class="font-semibold text-gray-600 text-sm italic">PAUSA TÉCNICA (Troca de TP)</span>
+</div>
+<div class="col-span-4 hide-compact"></div>
+<div class="text-right col-span-2 md:col-span-1">
+<span class="font-mono text-sm font-bold text-gray-600 bg-gray-200 px-1 rounded">00:00:15</span>
+</div>
+<div class="flex justify-center">
+<button class="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-200 text-slate-600 border border-slate-300 text-[10px] font-bold uppercase hover:bg-slate-300 transition-colors">
+        Pausa <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+</div>
+<div class="group relative rundown-grid gap-2 items-center bg-white border-l-4 border-l-red-500 border-y border-r border-slate-200 p-2 rounded-r-md shadow-sm hover:border-primary/50 hover:shadow-md transition-all active:scale-[0.995]">
+<div class="flex items-center justify-center h-full">
+<span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500 drag-handle text-[20px]">drag_indicator</span>
+</div>
+<div class="text-center text-xs font-mono text-slate-400 font-medium">4</div>
+<div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-red-50 text-red-700 text-[10px] font-bold border border-red-100 uppercase">
+<span class="material-symbols-outlined text-[12px]">live_tv</span> VIVO
+                                    </span>
+</div>
+<div class="flex flex-col min-w-0 pr-2">
+<span class="font-semibold text-slate-800 text-sm truncate">VIVO PREFEITURA - ENTREVISTA</span>
+<span class="text-[10px] text-slate-500 truncate">Repórter no local com Prefeito sobre obras</span>
+</div>
+<div class="flex items-center gap-2 overflow-hidden hide-compact">
+<div class="size-5 rounded-full bg-cover bg-center shrink-0" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCk4cCK7UqFsfOHARXlbW5ddLG0Nw9l-uyt8MTn5BBoRv5dW2URS8wHBp_ZM0SyChWPv3YObV4Nw-iMkMrgKUGVs2ApffHaIXClCdBxCFldAYbVnYK_HvirU4FbGKJ1FOSSYVJJk6wSwh6BZ220mA1JUa0_BtCFH75Bj2gR6UbS4TesvIRYsN-k_LXuRgHRI7WR7OD2WDPOdqy4oyQmiDMtS7CvqJcFA2fBtk7Wyw_079xlkw4zRJnOuvermSoVz4Cy4mcqb6YkFM4');"></div>
+<span class="text-xs text-slate-600 truncate">Julia R.</span>
+</div>
+<div class="text-xs text-slate-600 truncate hide-compact">Julia R.</div>
+<div class="text-xs text-slate-400 hide-compact">-</div>
+<div>
+<span class="text-[10px] font-mono text-slate-500 bg-slate-100 px-1 rounded border border-slate-200">LINK</span>
+</div>
+<div class="text-right">
+<span class="font-mono text-sm font-medium text-slate-800">00:03:00</span>
+</div>
+<div class="flex justify-center">
+<button class="flex items-center gap-1 px-2 py-0.5 rounded bg-red-50 text-red-700 border border-red-200 text-[10px] font-bold uppercase hover:bg-red-100 transition-colors">
+        Aguardando <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg border border-slate-200 shadow-sm mb-6 overflow-hidden opacity-90">
+<div class="bg-orange-50 border-b border-orange-100 px-4 py-2 flex items-center justify-between group cursor-pointer hover:bg-orange-100 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-orange-400">timer</span>
+<span class="font-bold text-orange-800">INTERVALO COMERCIAL</span>
+<span class="text-xs bg-orange-200 text-orange-800 px-2 py-0.5 rounded-full font-mono">03:00</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] text-orange-400 font-bold uppercase mr-2 tracking-wide">Break Externo</span>
+<button class="p-1 rounded hover:bg-orange-200 text-orange-400 hover:text-orange-600"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg border border-slate-200 shadow-sm mb-6 overflow-hidden">
+<div class="bg-slate-50 border-b border-slate-200 px-4 py-3 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors">
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-1 bg-slate-200 text-slate-400 hover:text-slate-600 text-[10px] font-bold uppercase px-2 py-1 rounded shadow-sm transition-colors" title="Wait for cue">
+<span class="material-symbols-outlined text-[14px]">play_arrow</span> Start
+                                </button>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600">expand_circle_down</span>
+<span class="font-bold text-slate-700">BLOCO 2 - ESPORTE</span>
+<span class="text-xs bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-mono">12:00</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-1 rounded hover:bg-slate-200 text-slate-400 hover:text-slate-600"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</div>
+</div>
+<div class="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-4 shadow-sm relative z-0">
+<span class="text-sm font-bold text-slate-700 uppercase">Adicionar:</span>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all text-sm font-medium bg-white">
+<span class="material-symbols-outlined text-blue-500 text-[18px]">article</span> Matéria
+        </button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all text-sm font-medium bg-white">
+<span class="material-symbols-outlined text-red-500 text-[18px]">videocam</span> Vivo
+        </button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all text-sm font-medium bg-white">
+<span class="material-symbols-outlined text-orange-500 text-[18px]">description</span> Nota
+        </button>
+<div class="w-px h-6 bg-slate-200"></div>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all text-sm font-medium bg-slate-100">
+<span class="material-symbols-outlined text-slate-700 text-[18px]">coffee</span> Intervalo
+        </button>
+</div>
+</div>
+<div class="p-2 flex flex-col gap-1 bg-slate-50/30">
+<div class="group relative rundown-grid gap-2 items-center bg-white border-l-4 border-l-yellow-400 border-y border-r border-slate-200 p-2 rounded-r-md shadow-sm hover:border-primary/50 hover:shadow-md transition-all active:scale-[0.995]">
+<div class="flex items-center justify-center h-full">
+<span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500 drag-handle text-[20px]">drag_indicator</span>
+</div>
+<div class="text-center text-xs font-mono text-slate-400 font-medium">5</div>
+<div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-yellow-50 text-yellow-700 text-[10px] font-bold border border-yellow-100 uppercase">
+<span class="material-symbols-outlined text-[12px]">description</span> NOTA
+                                    </span>
+</div>
+<div class="flex flex-col min-w-0 pr-2">
+<span class="font-semibold text-slate-800 text-sm truncate">NOTA COBERTA - FUTEBOL</span>
+<span class="text-[10px] text-slate-500 truncate">Resultados da rodada de ontem</span>
+</div>
+<div class="flex items-center gap-2 overflow-hidden hide-compact">
+<div class="size-5 rounded-full bg-cover bg-center shrink-0" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuANZmD7OTjL-DjqN4Yi48Wu6WUuPpGnxMhQ4Jf8RpNCyFrB63IqfH-rdM_kSd8kTn31ofeKnG_3Q6IY8UQ3ezQKug7s2THwKSWFDECXHYgIO_Ay6e-Dxe-rIzTeDZrrLwAvAEuxAvaj76UJPTAtRfa8zBAzCbSfubyIIu-K106Wg89jLlfjhYNK285Vldb9lzYrfdfqAiRpY3hx65pyuHZ6ilJVwD2Xv8ENSW9H0S9BZL_h_Bz5WFrbkWRE61ikan9G2kdd3KVbayk');"></div>
+<span class="text-xs text-slate-600 truncate">Ana Silva</span>
+</div>
+<div class="text-xs text-slate-600 truncate hide-compact">R. Gomes</div>
+<div class="text-xs text-slate-400 hide-compact">-</div>
+<div>
+<span class="text-[10px] font-mono text-slate-500 bg-slate-100 px-1 rounded border border-slate-200">RED</span>
+</div>
+<div class="text-right">
+<span class="font-mono text-sm font-medium text-slate-800">00:00:45</span>
+</div>
+<div class="flex justify-center">
+<button class="flex items-center gap-1 px-2 py-0.5 rounded bg-green-50 text-green-700 border border-green-200 text-[10px] font-bold uppercase hover:bg-green-100 transition-colors">
+        Aprovado <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="h-20"></div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-300 shadow-[0_-5px_15px_-5px_rgba(0,0,0,0.1)] z-30 flex flex-col max-h-[250px] transition-all" id="bottom-drawer">
+<div class="h-8 bg-slate-100 flex items-center justify-between px-4 cursor-pointer border-b border-slate-200">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">assignment</span>
+<span class="text-xs font-bold text-slate-700 uppercase">Reportagens do Dia (Drag &amp; Drop)</span>
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-1.5 rounded-full">2</span>
+</div>
+<span class="material-symbols-outlined text-slate-400">expand_more</span>
+</div>
+<div class="p-3 overflow-y-auto bg-slate-50 flex-1">
+<div class="flex flex-col gap-2">
+<div class="group relative rundown-grid gap-2 items-center bg-white border border-slate-200 p-2 rounded-md shadow-sm cursor-grab hover:border-primary/50 hover:shadow-md transition-all">
+<div class="flex items-center justify-center h-full">
+<span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500 text-[20px]">drag_pan</span>
+</div>
+<div class="text-center text-xs font-mono text-slate-300 font-medium">-</div>
+<div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 text-[10px] font-bold border border-indigo-100 uppercase">
+<span class="material-symbols-outlined text-[12px]">article</span> REP
+                                    </span>
+</div>
+<div class="flex flex-col min-w-0 pr-2">
+<span class="font-semibold text-slate-800 text-sm truncate">ACIDENTE RODOVIA SUL</span>
+<span class="text-[10px] text-slate-500 truncate">Carreta tombada no km 45 - Imagens exclusivas</span>
+</div>
+<div class="flex items-center gap-2 overflow-hidden hide-compact">
+<div class="size-5 rounded-full bg-slate-200 shrink-0 flex items-center justify-center text-[10px] font-bold text-slate-500">JP</div>
+<span class="text-xs text-slate-600 truncate">João P.</span>
+</div>
+<div class="text-xs text-slate-600 truncate hide-compact">João P.</div>
+<div class="text-xs text-slate-600 truncate hide-compact">M. Silva</div>
+<div>
+<span class="text-[10px] font-mono text-slate-500 bg-slate-100 px-1 rounded border border-slate-200">EXT</span>
+</div>
+<div class="text-right">
+<span class="font-mono text-sm font-medium text-slate-800">00:01:45</span>
+</div>
+<div></div>
+</div>
+<div class="group relative rundown-grid gap-2 items-center bg-white border border-slate-200 p-2 rounded-md shadow-sm cursor-grab hover:border-primary/50 hover:shadow-md transition-all">
+<div class="flex items-center justify-center h-full">
+<span class="material-symbols-outlined text-slate-300 group-hover:text-slate-500 text-[20px]">drag_pan</span>
+</div>
+<div class="text-center text-xs font-mono text-slate-300 font-medium">-</div>
+<div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-100 uppercase">
+<span class="material-symbols-outlined text-[12px]">movie</span> VT
+                                    </span>
+</div>
+<div class="flex flex-col min-w-0 pr-2">
+<span class="font-semibold text-slate-800 text-sm truncate">CLIMA PREVISÃO AMANHÃ</span>
+<span class="text-[10px] text-slate-500 truncate">Mapa do tempo completo</span>
+</div>
+<div class="flex items-center gap-2 overflow-hidden hide-compact">
+<div class="size-5 rounded-full bg-slate-200 shrink-0 flex items-center justify-center text-[10px] font-bold text-slate-500">S</div>
+<span class="text-xs text-slate-600 truncate">Sistema</span>
+</div>
+<div class="text-xs text-slate-400 hide-compact">-</div>
+<div class="text-xs text-slate-600 truncate hide-compact">Editoria</div>
+<div>
+<span class="text-[10px] font-mono text-slate-500 bg-slate-100 px-1 rounded border border-slate-200">ARQ</span>
+</div>
+<div class="text-right">
+<span class="font-mono text-sm font-medium text-slate-800">00:01:00</span>
+</div>
+<div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<aside class="w-80 bg-white border-l border-gray-200 flex flex-col shrink-0 z-10 hidden xl:flex">
+<div class="p-4 border-b border-gray-100 bg-white">
+<h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">chat</span>
+                        Comentários da Produção
+                    </h3>
+</div>
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-slate-50/50">
+<div class="flex gap-3">
+<div class="size-8 rounded-full bg-cover bg-center shrink-0 border border-slate-200" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBjnzx-RTIw_7F9YXtj5Ihb1QK0-p0HW9NgnH20CrXmAY_qvhRbpZHnqI4aiDD4q8wrQjBo0A5kIGRpZqglOislmpZBOBumBS7BxzrAbrXBvsOHFy0-dOtrra0anGA1zWxsa-TmrgPlixyUP55yTEnApe2USeG-2O-9xU_bdso6lRL677rSaEmSUpP0u7dRzv0DMSLL--uu3gudGT6RmWraigF1WcF1mJMc2DqsUaK--c6Mqt7TkLGAopBXjlxjoeowIlChVk1PCWU');"></div>
+<div class="flex flex-col gap-1 max-w-[85%]">
+<div class="flex items-baseline justify-between">
+<span class="text-xs font-bold text-slate-700">Diretor de TV</span>
+<span class="text-[10px] text-slate-400">10:32</span>
+</div>
+<div class="bg-white p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-slate-200 shadow-sm text-sm text-slate-600">
+                                Precisamos cortar a reportagem do trânsito. O vivo da prefeitura vai estourar.
+                            </div>
+</div>
+</div>
+<div class="flex gap-3 flex-row-reverse">
+<div class="size-8 rounded-full bg-cover bg-center shrink-0 border border-slate-200" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCWimfhNWE89rEGDe96T2KBkDLaOgkNjZ7hhDWcYOC7moj82dk1Ek_D5So1uCL-Eefxc4RlAoy61i9qywCTKjDJOeo7J0pNOOqml_wsjgzv8teE32sfBgHHYyOXx4Yj_WPnAT_463p3rXB0rq0wBPuB93Otta_ogtZIDGSVMSsm736LsMFoHf7B9LPR2g7Nk5hKBECfWCfQ9k7jbvHSlWuYol-IADFwjQkc8pLKkvg460Zlhqg85iwac--20WDGuvTF8KAXAf0OV90');"></div>
+<div class="flex flex-col gap-1 items-end max-w-[85%]">
+<div class="flex items-baseline justify-between w-full">
+<span class="text-[10px] text-slate-400">10:34</span>
+<span class="text-xs font-bold text-primary">Você</span>
+</div>
+<div class="bg-primary/10 p-3 rounded-tl-xl rounded-bl-xl rounded-br-xl border border-primary/10 text-sm text-slate-800">
+                                Ok, vou passar para o Bloco 2 ou derrubar?
+                            </div>
+</div>
+</div>
+</div>
+<div class="p-3 border-t border-gray-200 bg-white">
+<div class="relative">
+<input class="w-full pl-4 pr-10 py-2.5 bg-slate-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Digite uma observação..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-primary hover:bg-primary/10 rounded-full p-1 transition-colors">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+</div>
+<div class="border-t border-gray-200 p-4 bg-slate-50">
+<h3 class="text-xs font-bold text-slate-500 uppercase mb-3 flex items-center justify-between">
+                        Biblioteca Rápida
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer hover:text-primary">info</span>
+</h3>
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-white p-2 rounded border border-slate-200 flex flex-col items-center justify-center gap-1 cursor-grab hover:border-indigo-300 hover:shadow-sm hover:text-indigo-600 transition-all group h-16">
+<span class="material-symbols-outlined text-indigo-500 text-[20px] group-hover:scale-110 transition-transform">article</span>
+<span class="text-[9px] font-bold text-slate-600 group-hover:text-indigo-600">Reportagem</span>
+</div>
+<div class="bg-white p-2 rounded border border-slate-200 flex flex-col items-center justify-center gap-1 cursor-grab hover:border-red-300 hover:shadow-sm hover:text-red-600 transition-all group h-16">
+<span class="material-symbols-outlined text-red-500 text-[20px] group-hover:scale-110 transition-transform">live_tv</span>
+<span class="text-[9px] font-bold text-slate-600 group-hover:text-red-600">Ao Vivo</span>
+</div>
+<div class="bg-white p-2 rounded border border-slate-200 flex flex-col items-center justify-center gap-1 cursor-grab hover:border-yellow-300 hover:shadow-sm hover:text-yellow-600 transition-all group h-16">
+<span class="material-symbols-outlined text-yellow-500 text-[20px] group-hover:scale-110 transition-transform">description</span>
+<span class="text-[9px] font-bold text-slate-600 group-hover:text-yellow-600">Nota</span>
+</div>
+<div class="bg-white p-2 rounded border border-slate-200 flex flex-col items-center justify-center gap-1 cursor-grab hover:border-purple-300 hover:shadow-sm hover:text-purple-600 transition-all group h-16">
+<span class="material-symbols-outlined text-purple-500 text-[20px] group-hover:scale-110 transition-transform">sticky_note_2</span>
+<span class="text-[9px] font-bold text-slate-600 group-hover:text-purple-600">Nota Curta</span>
+</div>
+<div class="bg-white p-2 rounded border border-slate-200 flex flex-col items-center justify-center gap-1 cursor-grab hover:border-teal-300 hover:shadow-sm hover:text-teal-600 transition-all group h-16">
+<span class="material-symbols-outlined text-teal-500 text-[20px] group-hover:scale-110 transition-transform">assignment_ind</span>
+<span class="text-[9px] font-bold text-slate-600 group-hover:text-teal-600">Nota Prod</span>
+</div>
+<div class="bg-white p-2 rounded border border-slate-200 flex flex-col items-center justify-center gap-1 cursor-grab hover:border-blue-300 hover:shadow-sm hover:text-blue-600 transition-all group h-16">
+<span class="material-symbols-outlined text-blue-500 text-[20px] group-hover:scale-110 transition-transform">movie</span>
+<span class="text-[9px] font-bold text-slate-600 group-hover:text-blue-600">VT</span>
+</div>
+<div class="bg-white p-2 rounded border border-slate-200 flex flex-col items-center justify-center gap-1 cursor-grab hover:border-gray-400 hover:shadow-sm hover:text-gray-600 transition-all group h-16 col-span-3 border-l-4 border-l-gray-400 bg-gray-50/50">
+<span class="material-symbols-outlined text-gray-500 text-[20px] group-hover:scale-110 transition-transform">pause</span>
+<span class="text-[9px] font-bold text-slate-700 group-hover:text-gray-700">BREAK (Interno)</span>
+</div>
+</div>
+</div>
+</aside>
+</div></main>
+</body></html>

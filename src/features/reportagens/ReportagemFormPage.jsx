@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, Select, Row, Col, Card, Space, Divider, Steps, Badge, message } from 'antd';
-import { 
-  SaveOutlined, SendOutlined, CloseOutlined, 
-  HistoryOutlined, FileTextOutlined, CustomerServiceOutlined, 
-  FolderOpenOutlined, TimerOutlined 
+import {
+  SaveOutlined, SendOutlined, CloseOutlined,
+  HistoryOutlined, FileTextOutlined, CustomerServiceOutlined,
+  FolderOpenOutlined, ClockCircleOutlined
 } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import MainLayout from '@/components/shared/MainLayout';
@@ -174,7 +174,7 @@ const ReportagemFormPage = () => {
                   </Col>
                 </Row>
                 <Form.Item name="duracao" label="Duração Estimada">
-                   <Input prefix={<TimerOutlined />} placeholder="00:00:00" />
+                   <Input prefix={<ClockCircleOutlined />} placeholder="00:00:00" />
                 </Form.Item>
               </Card>
 

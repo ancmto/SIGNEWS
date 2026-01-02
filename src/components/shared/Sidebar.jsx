@@ -96,12 +96,13 @@ const Sidebar = () => {
     { label: 'Mídias & Ingest', icon: 'folder_open', path: '/ingest', implemented: false },
     
     { section: 'Exibição' },
-    { label: 'Espelhos', icon: 'view_timeline', path: '/espelhos', implemented: false },
+    { label: 'Espelhos', icon: 'view_timeline', path: '/espelhos', implemented: true },
     { label: 'Teleprompter', icon: 'live_tv', path: '/tp', implemented: false },
 
     { section: 'Sistema' },
+    { label: 'Notificações', icon: 'notifications', path: '/sistema/notificacoes', implemented: false },
     { label: 'Lixeira Global', icon: 'delete', path: '/sistema/lixeira', implemented: true },
-    { label: 'Configurações', icon: 'settings', path: '/settings', implemented: false },
+    { label: 'Configurações', icon: 'settings', path: '/configuracoes/usuarios', implemented: true },
   ];
 
   const handleLogout = () => {

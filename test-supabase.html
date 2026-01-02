@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste Supabase - Programas</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <h1>Teste de Conexão Supabase</h1>
+  <div id="result"></div>
+
+  <script>
+    const { createClient } = supabase;
+
+    const supabaseUrl = 'https://joqtrwieeuytpnivqomd.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpvcXRyd2llZXV5dHBuaXZxb21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5NzMxNDksImV4cCI6MjA4MjU0OTE0OX0.SBZi8_9Umpv4LF3ACsM70jobCVQSlSUfSI2VvzDp0nI';
+
+    const client = createClient(supabaseUrl, supabaseKey);
+
+    async function testConnection() {
+      const resultDiv = document.getElementById('result');
+
+      try {
+        console.log('🔄 Testando conexão com Supabase...');
+        resultDiv.innerHTML = '<p>🔄 Carregando programas...</p>';
+
+        const { data, error } = await client
+          .from('programas')
+          .select('*')
+          .eq('ativo', true)
+          .is('deleted_at', null)
+          .order('nome');
+
+        if (error) {
+          console.error('❌ Erro:', error);
+          resultDiv.innerHTML = `
+            <h2 style="color: red;">❌ Erro ao carregar programas</h2>
+            <pre>${JSON.stringify(error, null, 2)}</pre>
+          `;
+          return;
+        }
+
+        console.log('✅ Programas carregados:', data);
+
+        if (data && data.length > 0) {
+          resultDiv.innerHTML = `
+            <h2 style="color: green;">✅ Sucesso! ${data.length} programas encontrados</h2>
+            <ul>
+              ${data.map(p => `<li><strong>${p.nome}</strong> - ${p.descricao}</li>`).join('')}
+            </ul>
+            <h3>Dados completos:</h3>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          `;
+        } else {
+          resultDiv.innerHTML = `
+            <h2 style="color: orange;">⚠️ Nenhum programa encontrado</h2>
+            <p>A tabela existe mas está vazia. Execute o INSERT do seed data.</p>
+          `;
+        }
+      } catch (err) {
+        console.error('❌ Erro na requisição:', err);
+        resultDiv.innerHTML = `
+          <h2 style="color: red;">❌ Erro na requisição</h2>
+          <pre>${err.message}</pre>
+        `;
+      }
+    }
+
+    // Executa o teste ao carregar a página
+    testConnection();
+  </script>
+</body>
+</html>

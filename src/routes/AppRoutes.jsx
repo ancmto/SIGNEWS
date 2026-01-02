@@ -14,6 +14,14 @@ import PautaFormPage from '@/features/pautas/PautaFormPage';
 import ReportagemListPage from '@/features/reportagens/ReportagemListPage';
 import ReportagemFormPage from '@/features/reportagens/ReportagemFormPage';
 
+// --- IMPORTS DE ESPELHOS ---
+import EspelhoPage from '@/features/espelhos/EspelhoPage';
+
+// --- IMPORTS DE CONFIGURAÇÕES ---
+import UsersPage from '@/features/configuracoes/UsersPage';
+import CreateUserPage from '@/features/configuracoes/CreateUserPage';
+import AuditPage from '@/features/configuracoes/AuditPage';
+
 import LixeiraGlobal from '@/features/lixeira/LixeiraGlobal';
 
 // Simple placeholder for other routes
@@ -47,6 +55,15 @@ const AppRoutes = () => {
       <Route path="/producao/reportagens" element={<ReportagemListPage />} />
       <Route path="/producao/reportagens/nova" element={<ReportagemFormPage />} />
       <Route path="/producao/reportagens/editar/:id" element={<ReportagemFormPage />} />
+
+      {/* --- ROTAS DE ESPELHOS --- */}
+      <Route path="/espelhos" element={<EspelhoPage />} />
+
+      {/* --- ROTAS DE CONFIGURAÇÕES --- */}
+      <Route path="/configuracoes/usuarios" element={<UsersPage />} />
+      <Route path="/configuracoes/usuarios/novo" element={<CreateUserPage />} />
+      <Route path="/configuracoes/auditoria" element={<AuditPage />} />
+      <Route path="/settings" element={<UsersPage />} />
 
       {/* Sistema */}
       <Route path="/sistema/lixeira" element={<LixeiraGlobal />} />

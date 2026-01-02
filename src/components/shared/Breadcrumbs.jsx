@@ -62,6 +62,18 @@ const Breadcrumbs = () => {
     else if (path.includes('/lixeira')) {
       items.push({ title: 'Sistema' });
       items.push({ title: 'Lixeira Global' });
+    }
+
+    // Configurações
+    else if (path.startsWith('/configuracoes/usuarios')) {
+      items.push({ title: 'Sistema' });
+      items.push({ title: <Link to="/configuracoes/usuarios">Configurações</Link> });
+      items.push({ title: <Link to="/configuracoes/usuarios">Usuários</Link> });
+      if (path.endsWith('/novo')) items.push({ title: 'Novo Usuário' });
+    } else if (path.startsWith('/configuracoes/auditoria')) {
+      items.push({ title: 'Sistema' });
+      items.push({ title: <Link to="/configuracoes/usuarios">Configurações</Link> });
+      items.push({ title: 'Auditoria' });
     } else if (path === '/settings') {
       items.push({ title: 'Sistema' });
       items.push({ title: 'Configurações' });
