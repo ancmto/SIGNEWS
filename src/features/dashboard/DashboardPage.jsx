@@ -5,6 +5,27 @@ import { useAuth } from '@/components/common/AuthContext';
 import { dashboardService } from './dashboard.service';
 import styles from './dashboard.module.css';
 
+// Funções auxiliares
+const getStatusConfig = (status) => {
+  const configs = {
+    'rascunho': { label: 'Rascunho', color: 'bg-gray-300', labelColor: 'bg-gray-100 text-slate-500' },
+    'aprovado': { label: 'Aprovado', color: 'bg-info', labelColor: 'bg-blue-50 text-info border-blue-100' },
+    'no_ar': { label: 'NO AR', color: 'bg-error', labelColor: 'bg-error/10 text-error border-error/20' },
+    'encerrado': { label: 'Encerrado', color: 'bg-gray-300', labelColor: 'bg-gray-100 text-slate-500' }
+  };
+  return configs[status] || { label: 'Preparação', color: 'bg-warning', labelColor: 'bg-warning/10 text-amber-700 border-warning/20' };
+};
+
+const formatTime = (time) => {
+  if (!time) return '--:--';
+  return time.substring(0, 5);
+};
+
+const calculateProgress = (espelho) => {
+  if (!espelho.tempo_total_previsto || !espelho.tempo_total_real) return 0;
+  return Math.min(Math.round((espelho.tempo_total_real / espelho.tempo_total_previsto) * 100), 100);
+};
+
 const DashboardPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -13,20 +34,23 @@ const DashboardPage = () => {
   const [stats, setStats] = useState({ pautas: 0, pautasPending: 0, pautasApproved: 0, reportagens: 0, espelhos: 0, contacts: 0 });
   const [activities, setActivities] = useState([]);
   const [teams, setTeams] = useState([]);
+  const [espelhosStatus, setEspelhosStatus] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
         setLoading(true);
-        const [statsData, activitiesData, teamsData] = await Promise.all([
+        const [statsData, activitiesData, teamsData, espelhosData] = await Promise.all([
           dashboardService.getDashboardStats(),
           dashboardService.getRecentActivity(),
-          dashboardService.getExternalTeams()
+          dashboardService.getExternalTeams(),
+          dashboardService.getEspelhosStatus()
         ]);
         setStats(statsData);
         setActivities(activitiesData);
         setTeams(teamsData);
+        setEspelhosStatus(espelhosData);
       } catch (error) {
         console.error('Erro ao carregar dados do dashboard:', error);
       } finally {
@@ -202,47 +226,44 @@ const DashboardPage = () => {
               <span className="material-symbols-outlined text-primary">view_kanban</span>
               Status dos Espelhos
             </h3>
-            <button className="text-xs text-primary font-medium hover:underline flex items-center gap-1">
+            <button
+              onClick={() => navigate('/espelhos')}
+              className="text-xs text-primary font-medium hover:underline flex items-center gap-1"
+            >
               Ver grade completa
               <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
             </button>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <MirrorStatusCard 
-              title="Jornal da Manhã" 
-              time="07:00 - 08:30" 
-              status="Encerrado" 
-              statusColor="bg-gray-300"
-              statusLabelColor="bg-gray-100 text-slate-500"
-              editor="Carlos M."
-            />
-            <MirrorStatusCard 
-              title="SGI Meio Dia" 
-              time="12:00 - 13:15" 
-              status="NO AR" 
-              statusColor="bg-error"
-              statusLabelColor="bg-error/10 text-error border-error/20"
-              progress={45}
-              isLive={true}
-            />
-            <MirrorStatusCard 
-              title="Jornal da Tarde" 
-              time="18:30 - 19:15" 
-              status="Preparação" 
-              statusColor="bg-warning"
-              statusLabelColor="bg-warning/10 text-amber-700 border-warning/20"
-              stats={{ items: 12, time: "45'", overflow: "-2'" }}
-            />
-            <MirrorStatusCard 
-              title="Edição da Noite" 
-              time="22:00 - 22:45" 
-              status="Aberto" 
-              statusColor="bg-info"
-              statusLabelColor="bg-blue-50 text-info border-blue-100"
-              editor="Patricia L."
-              showLink={true}
-            />
+            {loading ? (
+              <div className="col-span-2 text-center text-sm text-slate-500 py-8">
+                Carregando espelhos...
+              </div>
+            ) : espelhosStatus.length === 0 ? (
+              <div className="col-span-2 text-center text-sm text-slate-500 py-8">
+                Nenhum espelho criado para hoje.
+              </div>
+            ) : (
+              espelhosStatus.map((espelho) => {
+                const statusConfig = getStatusConfig(espelho.status);
+                return (
+                  <MirrorStatusCard
+                    key={espelho.id}
+                    title={espelho.programa?.nome || 'Programa'}
+                    time={formatTime(espelho.horario_previsto)}
+                    status={statusConfig.label}
+                    statusColor={statusConfig.color}
+                    statusLabelColor={statusConfig.labelColor}
+                    editor={espelho.editor_responsavel}
+                    progress={espelho.status === 'no_ar' ? calculateProgress(espelho) : undefined}
+                    isLive={espelho.status === 'no_ar'}
+                    showLink={true}
+                    onClickLink={() => navigate(`/espelhos/${espelho.id}`)}
+                  />
+                );
+              })
+            )}
           </div>
         </div>
 
@@ -312,8 +333,11 @@ const DashboardPage = () => {
 };
 
 // HELPER COMPONENTS FOR DASHBOARD
-const MirrorStatusCard = ({ title, time, status, statusColor, statusLabelColor, editor, progress, isLive, stats, showLink }) => (
-  <div className="ant-card p-4 flex flex-col justify-between hover:shadow-floating transition-all duration-300 cursor-pointer relative overflow-hidden group">
+const MirrorStatusCard = ({ title, time, status, statusColor, statusLabelColor, editor, progress, isLive, stats, showLink, onClickLink }) => (
+  <div
+    className="ant-card p-4 flex flex-col justify-between hover:shadow-floating transition-all duration-300 cursor-pointer relative overflow-hidden group"
+    onClick={onClickLink}
+  >
     <div className={`absolute top-0 left-0 w-1 h-full ${statusColor} group-hover:w-1.5 transition-all`}></div>
     <div className="flex justify-between items-start mb-3 pl-2">
       <div>
@@ -335,7 +359,7 @@ const MirrorStatusCard = ({ title, time, status, statusColor, statusLabelColor, 
         {status}
       </span>
     </div>
-    
+
     <div className="mt-2 pl-2">
       {progress !== undefined ? (
         <>
@@ -366,7 +390,13 @@ const MirrorStatusCard = ({ title, time, status, statusColor, statusLabelColor, 
         </div>
       ) : (
         <div className="flex items-center justify-between border-t border-gray-50 pt-3">
-          <span className="text-xs text-slate-400">Editor: <strong className="text-slate-700">{editor}</strong></span>
+          <span className="text-xs text-slate-400">
+            {editor ? (
+              <>Editor: <strong className="text-slate-700">{editor}</strong></>
+            ) : (
+              <span className="text-slate-400">Sem editor definido</span>
+            )}
+          </span>
           {showLink && <button className="text-xs text-primary hover:underline font-medium">Abrir Espelho</button>}
         </div>
       )}
